@@ -15,7 +15,9 @@
 
 </head>
 
+
 <body>
+
 
 <header>
 
@@ -38,9 +40,11 @@
 </header>
 
 
+
 <section class="admin-dashboard">
 
     <div class="admin-container">
+
 
         <h1>
             Admin Dashboard 🛡️
@@ -51,61 +55,108 @@
         </p>
 
 
-        <!-- Statistics -->
+
+        <!-- =========================
+             STATISTICS
+        ========================== -->
 
         <div class="admin-stats">
 
+
             <div class="stat-card">
 
-                <div class="stat-icon">📋</div>
+                <div class="stat-icon">
+                    📋
+                </div>
 
                 <div>
-                    <h2 id="totalCount">24</h2>
-                    <p>Total Complaints</p>
+
+                    <h2 id="totalCount">
+                        24
+                    </h2>
+
+                    <p>
+                        Total Complaints
+                    </p>
+
                 </div>
 
             </div>
 
 
+
             <div class="stat-card">
 
-                <div class="stat-icon">⏳</div>
+                <div class="stat-icon">
+                    ⏳
+                </div>
 
                 <div>
-                    <h2 id="pendingCount">08</h2>
-                    <p>Pending</p>
+
+                    <h2 id="pendingCount">
+                        08
+                    </h2>
+
+                    <p>
+                        Pending
+                    </p>
+
                 </div>
 
             </div>
 
 
+
             <div class="stat-card">
 
-                <div class="stat-icon">🔄</div>
+                <div class="stat-icon">
+                    🔄
+                </div>
 
                 <div>
-                    <h2 id="reviewCount">06</h2>
-                    <p>Under Review</p>
+
+                    <h2 id="reviewCount">
+                        06
+                    </h2>
+
+                    <p>
+                        Under Review
+                    </p>
+
                 </div>
 
             </div>
 
 
+
             <div class="stat-card">
 
-                <div class="stat-icon">✅</div>
+                <div class="stat-icon">
+                    ✅
+                </div>
 
                 <div>
-                    <h2 id="resolvedCount">10</h2>
-                    <p>Resolved</p>
+
+                    <h2 id="resolvedCount">
+                        10
+                    </h2>
+
+                    <p>
+                        Resolved
+                    </p>
+
                 </div>
 
             </div>
+
 
         </div>
 
 
-        <!-- Recent Complaints -->
+
+        <!-- =========================
+             RECENT COMPLAINTS
+        ========================== -->
 
         <div class="admin-section-header">
 
@@ -120,14 +171,21 @@
         </div>
 
 
-        <!-- NEW STUDENT COMPLAINT -->
+
+        <!-- =========================
+             NEW STUDENT COMPLAINT
+        ========================== -->
 
         <div id="newComplaintArea"></div>
 
 
-        <!-- OLD COMPLAINT -->
+
+        <!-- =========================
+             OLD COMPLAINT 1
+        ========================== -->
 
         <div class="admin-complaint">
+
 
             <div class="admin-complaint-main">
 
@@ -150,27 +208,38 @@
             </div>
 
 
+
             <div class="admin-complaint-side">
 
                 <span id="oldStatus"
                       class="status pending">
+
                     Pending
+
                 </span>
+
 
                 <a href="admin-resolution.html"
                    class="admin-action"
                    id="oldButton">
+
                     Manage
+
                 </a>
 
             </div>
 
+
         </div>
 
 
-        <!-- OLD COMPLAINT 2 -->
+
+        <!-- =========================
+             OLD COMPLAINT 2
+        ========================== -->
 
         <div class="admin-complaint">
+
 
             <div class="admin-complaint-main">
 
@@ -193,18 +262,25 @@
             </div>
 
 
+
             <div class="admin-complaint-side">
 
                 <span class="status resolved">
+
                     Resolved
+
                 </span>
+
 
                 <a href="admin-resolution.html"
                    class="admin-action">
+
                     View
+
                 </a>
 
             </div>
+
 
         </div>
 
@@ -214,21 +290,35 @@
 </section>
 
 
+
+<!-- =========================
+     JAVASCRIPT
+========================== -->
+
 <script>
+
 
 window.onload = function () {
 
 
-    /* Get new complaint */
+    /*
+    ==========================================
+    1. GET NEW STUDENT COMPLAINT
+    ==========================================
+    */
+
 
     const savedComplaint =
         localStorage.getItem("newComplaint");
 
 
+
     if (savedComplaint) {
+
 
         const complaint =
             JSON.parse(savedComplaint);
+
 
 
         const area =
@@ -237,72 +327,163 @@ window.onload = function () {
             );
 
 
+
+        /*
+        --------------------------------------
+        Determine status
+        --------------------------------------
+        */
+
+
+        let status =
+            complaint.status || "Pending";
+
+
+
+        /*
+        --------------------------------------
+        Determine CSS class
+        --------------------------------------
+        */
+
+
+        let statusClass =
+            "pending";
+
+
+        if (status === "Resolved") {
+
+            statusClass = "resolved";
+
+        }
+
+        else if (
+            status === "Under Review" ||
+            status === "In Progress"
+        ) {
+
+            statusClass = "review";
+
+        }
+
+        else if (status === "Rejected") {
+
+            statusClass = "rejected";
+
+        }
+
+
+
+        /*
+        --------------------------------------
+        Determine button text
+        --------------------------------------
+        */
+
+
+        let buttonText =
+            "Manage";
+
+
+        if (status === "Resolved") {
+
+            buttonText = "View";
+
+        }
+
+
+
+        /*
+        --------------------------------------
+        Display complaint
+        --------------------------------------
+        */
+
+
         area.innerHTML = `
 
             <div class="admin-complaint">
 
+
                 <div class="admin-complaint-main">
 
+
                     <span class="complaint-id">
+
                         ${complaint.id}
+
                     </span>
 
+
                     <h3>
+
                         ${complaint.subject}
+
                     </h3>
 
+
                     <p>
+
                         📍 ${complaint.location}
+
                     </p>
 
+
                     <p>
+
                         🏷️ ${complaint.category}
+
                     </p>
 
+
                     <p>
-                        ⚠️ Priority: ${complaint.priority}
+
+                        ⚠️ Priority:
+                        ${complaint.priority}
+
                     </p>
+
 
                 </div>
+
 
 
                 <div class="admin-complaint-side">
 
-                    <span class="status pending">
-                        ${complaint.status}
+
+                    <span class="status ${statusClass}">
+
+                        ${status}
+
                     </span>
+
 
                     <a href="admin-resolution.html"
                        class="admin-action">
 
-                        Manage
+                        ${buttonText}
 
                     </a>
 
+
                 </div>
+
 
             </div>
 
         `;
 
 
-        /* Update total */
-
-        document.getElementById(
-            "totalCount"
-        ).innerText = "25";
-
-
-        /* Update pending */
-
-        document.getElementById(
-            "pendingCount"
-        ).innerText = "09";
-
     }
 
 
-    /* Update old complaint status */
+
+    /*
+    ==========================================
+    2. UPDATE OLD COMPLAINT STATUS
+    ==========================================
+    */
+
 
     const oldStatus =
         localStorage.getItem(
@@ -310,12 +491,15 @@ window.onload = function () {
         );
 
 
+
     if (oldStatus) {
+
 
         const statusBox =
             document.getElementById(
                 "oldStatus"
             );
+
 
         const button =
             document.getElementById(
@@ -323,52 +507,376 @@ window.onload = function () {
             );
 
 
+
         statusBox.innerText =
             oldStatus;
+
 
 
         statusBox.className =
             "status";
 
 
+
+        /*
+        --------------------------------------
+        Resolved
+        --------------------------------------
+        */
+
+
         if (oldStatus === "Resolved") {
+
 
             statusBox.classList.add(
                 "resolved"
             );
 
+
             button.innerText =
                 "View";
 
-        } else {
+
+        }
+
+
+        /*
+        --------------------------------------
+        Under Review / In Progress
+        --------------------------------------
+        */
+
+
+        else if (
+            oldStatus === "Under Review" ||
+            oldStatus === "In Progress"
+        ) {
+
+
+            statusBox.classList.add(
+                "review"
+            );
+
+
+            button.innerText =
+                "Manage";
+
+
+        }
+
+
+        /*
+        --------------------------------------
+        Rejected
+        --------------------------------------
+        */
+
+
+        else if (
+            oldStatus === "Rejected"
+        ) {
+
+
+            statusBox.classList.add(
+                "rejected"
+            );
+
+
+            button.innerText =
+                "View";
+
+
+        }
+
+
+        /*
+        --------------------------------------
+        Pending
+        --------------------------------------
+        */
+
+
+        else {
+
 
             statusBox.classList.add(
                 "pending"
             );
+
 
             button.innerText =
                 "Manage";
 
         }
 
+
     }
+
+
+
+    /*
+    ==========================================
+    3. UPDATE DASHBOARD COUNTS
+    ==========================================
+    */
+
+
+    updateDashboardCounts();
+
 
 };
 
+
+
+
+/*
+==========================================
+UPDATE DASHBOARD COUNTS
+==========================================
+*/
+
+
+function updateDashboardCounts() {
+
+
+    /*
+    --------------------------------------
+    Existing complaints
+    --------------------------------------
+    */
+
+
+    let total =
+        24;
+
+
+    let pending =
+        8;
+
+
+    let review =
+        6;
+
+
+    let resolved =
+        10;
+
+
+
+    /*
+    --------------------------------------
+    Check old complaint
+    --------------------------------------
+    */
+
+
+    const oldStatus =
+        localStorage.getItem(
+            "complaintStatus"
+        );
+
+
+
+    if (oldStatus) {
+
+
+        /*
+        Original CR1001 was Pending.
+        Remove it from Pending first.
+        */
+
+
+        pending =
+            pending - 1;
+
+
+
+        /*
+        Add it to correct category
+        */
+
+
+        if (
+            oldStatus === "Resolved"
+        ) {
+
+            resolved =
+                resolved + 1;
+
+        }
+
+        else if (
+            oldStatus === "Under Review" ||
+            oldStatus === "In Progress"
+        ) {
+
+            review =
+                review + 1;
+
+        }
+
+        else if (
+            oldStatus === "Pending"
+        ) {
+
+            pending =
+                pending + 1;
+
+        }
+
+    }
+
+
+
+    /*
+    --------------------------------------
+    Check new student complaint
+    --------------------------------------
+    */
+
+
+    const savedComplaint =
+        localStorage.getItem(
+            "newComplaint"
+        );
+
+
+
+    if (savedComplaint) {
+
+
+        const complaint =
+            JSON.parse(savedComplaint);
+
+
+        const newStatus =
+            complaint.status || "Pending";
+
+
+
+        /*
+        New complaint was originally counted
+        as Pending.
+        */
+
+
+        total =
+            total + 1;
+
+
+        pending =
+            pending + 1;
+
+
+
+        /*
+        If its status changed,
+        move it from Pending.
+        */
+
+
+        if (
+            newStatus === "Resolved"
+        ) {
+
+
+            pending =
+                pending - 1;
+
+
+            resolved =
+                resolved + 1;
+
+        }
+
+
+        else if (
+            newStatus === "Under Review" ||
+            newStatus === "In Progress"
+        ) {
+
+
+            pending =
+                pending - 1;
+
+
+            review =
+                review + 1;
+
+        }
+
+
+        else if (
+            newStatus === "Rejected"
+        ) {
+
+
+            pending =
+                pending - 1;
+
+        }
+
+
+    }
+
+
+
+    /*
+    --------------------------------------
+    Display numbers
+    --------------------------------------
+    */
+
+
+    document.getElementById(
+        "totalCount"
+    ).innerText =
+        total;
+
+
+
+    document.getElementById(
+        "pendingCount"
+    ).innerText =
+        pending;
+
+
+
+    document.getElementById(
+        "reviewCount"
+    ).innerText =
+        review;
+
+
+
+    document.getElementById(
+        "resolvedCount"
+    ).innerText =
+        resolved;
+
+
+}
+
 </script>
+
 
 
 <footer>
 
     <h3>
+
         Campus<span>Resolve</span>
+
     </h3>
 
     <p>
+
         College Complaint & Resolution System
+
     </p>
 
 </footer>
+
 
 </body>
 
