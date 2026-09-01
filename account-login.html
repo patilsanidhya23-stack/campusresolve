@@ -1,0 +1,158 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Choose Login | CampusResolve</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+
+<header>
+
+    <div class="logo">
+        Campus<span>Resolve</span>
+    </div>
+
+    <nav>
+
+        <a href="index.html">
+            Home
+        </a>
+
+    </nav>
+
+</header>
+
+
+<section class="login-section">
+
+    <div class="login-box">
+
+        <div class="login-icon">
+            🔐
+        </div>
+
+
+        <h1>
+            Welcome to CampusResolve
+        </h1>
+
+
+        <p>
+            Choose your account type to continue.
+        </p>
+
+
+        <!-- STUDENT LOGIN -->
+
+        <div class="login-option">
+
+            <h2>
+                👨‍🎓 Student Login
+            </h2>
+
+            <p>
+                Submit complaints, track issues and
+                view resolutions.
+            </p>
+
+
+            <button
+                type="button"
+                class="login-option-button"
+                onclick="openStudentLogin()">
+
+                Student Login
+
+            </button>
+
+        </div>
+
+
+        <!-- ADMIN LOGIN -->
+
+        <div class="login-option admin-option">
+
+            <h2>
+                🛡️ Admin Login
+            </h2>
+
+            <p>
+                Manage complaints and provide resolutions.
+            </p>
+
+
+            <button
+                type="button"
+                class="login-option-button admin-button"
+                onclick="openAdminLogin()">
+
+                Admin Login
+
+            </button>
+
+        </div>
+
+
+        <a href="index.html"
+           class="back-button">
+
+            ← Back to Home
+
+        </a>
+
+    </div>
+
+</section>
+
+
+<script>
+
+/* Student Login */
+
+function openStudentLogin() {
+
+    window.location.href = "./login.html";
+
+}
+
+
+/* Admin Login */
+
+function openAdminLogin() {
+
+    window.location.href = "./admin-login.html";
+
+}
+
+</script>
+
+
+<footer>
+
+    <h3>
+        Campus<span>Resolve</span>
+    </h3>
+
+    <p>
+        College Complaint & Resolution System
+    </p>
+
+</footer>
+
+
+</body>
+
+</html>
+```
