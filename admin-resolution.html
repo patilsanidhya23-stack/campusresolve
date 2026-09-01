@@ -15,6 +15,7 @@
 
 </head>
 
+
 <body>
 
 
@@ -125,9 +126,7 @@
 
 
 
-            <form
-                id="resolutionForm"
-                onsubmit="updateComplaint(event)">
+            <form id="resolutionForm">
 
 
                 <label for="status">
@@ -141,32 +140,44 @@
 
 
                     <option value="">
+
                         Select Status
+
                     </option>
 
 
                     <option value="Pending">
+
                         Pending
+
                     </option>
 
 
                     <option value="Under Review">
+
                         Under Review
+
                     </option>
 
 
                     <option value="In Progress">
+
                         In Progress
+
                     </option>
 
 
                     <option value="Resolved">
+
                         Resolved
+
                     </option>
 
 
                     <option value="Rejected">
+
                         Rejected
+
                     </option>
 
 
@@ -185,32 +196,44 @@
 
 
                     <option value="">
+
                         Select Department
+
                     </option>
 
 
-                    <option>
+                    <option value="Maintenance">
+
                         Maintenance
+
                     </option>
 
 
-                    <option>
+                    <option value="IT Department">
+
                         IT Department
+
                     </option>
 
 
-                    <option>
+                    <option value="Hostel Department">
+
                         Hostel Department
+
                     </option>
 
 
-                    <option>
+                    <option value="Library Department">
+
                         Library Department
+
                     </option>
 
 
-                    <option>
+                    <option value="Administration">
+
                         Administration
+
                     </option>
 
 
@@ -264,9 +287,9 @@
 <script>
 
 
-/* ==========================================
+/* =====================================================
    GET COMPLAINT ID FROM URL
-========================================== */
+===================================================== */
 
 
 const urlParams =
@@ -280,43 +303,100 @@ const selectedComplaintId =
 
 
 
-/* ==========================================
+/* =====================================================
    GET ALL COMPLAINTS
-========================================== */
+===================================================== */
 
 
-let complaints =
-    JSON.parse(
-        localStorage.getItem("allComplaints")
-    ) || [];
+function getAllComplaints() {
+
+
+    let data =
+        localStorage.getItem(
+            "allComplaints"
+        );
+
+
+    if (!data) {
+
+        return [];
+
+    }
+
+
+    try {
+
+        const complaints =
+            JSON.parse(data);
+
+
+        if (Array.isArray(complaints)) {
+
+            return complaints;
+
+        }
+
+
+        return [];
+
+
+    } catch (error) {
+
+        console.error(
+            "Error reading complaints:",
+            error
+        );
+
+
+        return [];
+
+    }
+
+}
 
 
 
-/* ==========================================
-   FIND EXACT COMPLAINT
-========================================== */
+/* =====================================================
+   FIND CURRENT COMPLAINT
+===================================================== */
 
 
-let selectedComplaint =
-    complaints.find(
-        function (complaint) {
+function getCurrentComplaint() {
 
-            return complaint.id === selectedComplaintId;
+
+    const complaints =
+        getAllComplaints();
+
+
+    return complaints.find(
+        function(complaint) {
+
+            return (
+                String(complaint.id) ===
+                String(selectedComplaintId)
+            );
 
         }
     );
 
+}
 
 
-/* ==========================================
+
+/* =====================================================
    LOAD COMPLAINT
-========================================== */
+===================================================== */
 
 
-window.onload = function () {
+window.onload = function() {
 
 
-    if (!selectedComplaint) {
+    const complaint =
+        getCurrentComplaint();
+
+
+
+    if (!complaint) {
 
 
         document.querySelector(
@@ -328,8 +408,10 @@ window.onload = function () {
             </h2>
 
             <p>
-                The complaint ID
-                <strong>${selectedComplaintId}</strong>
+                Complaint ID:
+                <strong>
+                    ${selectedComplaintId}
+                </strong>
                 was not found.
             </p>
 
@@ -352,26 +434,38 @@ window.onload = function () {
 
 
 
+    /* Complaint ID */
+
+
     document.getElementById(
         "complaintId"
     ).innerText =
         "Complaint #" +
-        selectedComplaint.id;
+        complaint.id;
 
+
+
+    /* Subject */
 
 
     document.getElementById(
         "complaintSubject"
     ).innerText =
-        selectedComplaint.subject;
+        complaint.subject;
 
+
+
+    /* Description */
 
 
     document.getElementById(
         "complaintDescription"
     ).innerText =
-        selectedComplaint.description;
+        complaint.description;
 
+
+
+    /* Details */
 
 
     document.getElementById(
@@ -381,7 +475,7 @@ window.onload = function () {
         <p>
 
             <strong>Category:</strong>
-            ${selectedComplaint.category}
+            ${complaint.category}
 
         </p>
 
@@ -389,7 +483,7 @@ window.onload = function () {
         <p>
 
             <strong>Location:</strong>
-            ${selectedComplaint.location}
+            ${complaint.location}
 
         </p>
 
@@ -397,7 +491,7 @@ window.onload = function () {
         <p>
 
             <strong>Priority:</strong>
-            ${selectedComplaint.priority}
+            ${complaint.priority}
 
         </p>
 
@@ -405,8 +499,9 @@ window.onload = function () {
         <p>
 
             <strong>Submitted By:</strong>
+
             ${
-                selectedComplaint.anonymous
+                complaint.anonymous
                 ? "Anonymous Student"
                 : "Student"
             }
@@ -417,7 +512,7 @@ window.onload = function () {
         <p>
 
             <strong>Submitted:</strong>
-            ${selectedComplaint.date}
+            ${complaint.date}
 
         </p>
 
@@ -425,64 +520,59 @@ window.onload = function () {
 
 
 
-    /*
-    CURRENT STATUS
-    */
+    /* Current status */
 
 
     document.getElementById(
         "status"
     ).value =
-        selectedComplaint.status;
+        complaint.status || "Pending";
 
 
 
     document.getElementById(
         "currentStatus"
     ).innerText =
-        selectedComplaint.status;
+        complaint.status || "Pending";
 
 
 
     updateStatusStyle(
-        selectedComplaint.status
+        complaint.status || "Pending"
     );
 
 
 
-    /*
-    EXISTING DEPARTMENT
-    */
+    /* Department */
 
 
     if (
-        selectedComplaint.department &&
-        selectedComplaint.department !== "Not Assigned"
+        complaint.department &&
+        complaint.department !== "Not Assigned"
     ) {
 
         document.getElementById(
             "department"
         ).value =
-            selectedComplaint.department;
+            complaint.department;
 
     }
 
 
 
-    /*
-    EXISTING RESOLUTION
-    */
+    /* Resolution */
 
 
     if (
-        selectedComplaint.resolution &&
-        selectedComplaint.resolution !== "No resolution yet"
+        complaint.resolution &&
+        complaint.resolution !==
+        "No resolution yet"
     ) {
 
         document.getElementById(
             "resolution"
         ).value =
-            selectedComplaint.resolution;
+            complaint.resolution;
 
     }
 
@@ -490,10 +580,9 @@ window.onload = function () {
 
 
 
-
-/* ==========================================
+/* =====================================================
    STATUS STYLE
-========================================== */
+===================================================== */
 
 
 function updateStatusStyle(status) {
@@ -553,188 +642,180 @@ function updateStatusStyle(status) {
 
 
 
-/* ==========================================
-   UPDATE EXACT COMPLAINT
-========================================== */
+/* =====================================================
+   UPDATE COMPLAINT
+===================================================== */
 
 
-function updateComplaint(event) {
+document
+.getElementById("resolutionForm")
+.addEventListener(
+    "submit",
+    function(event) {
 
 
-    event.preventDefault();
+        event.preventDefault();
 
 
 
-    /*
-    Make sure complaint exists
-    */
+        /* Get latest data AGAIN */
 
 
-    if (!selectedComplaint) {
+        const complaints =
+            getAllComplaints();
+
+
+
+        /* Find exact complaint */
+
+
+        const index =
+            complaints.findIndex(
+                function(complaint) {
+
+                    return (
+                        String(complaint.id) ===
+                        String(selectedComplaintId)
+                    );
+
+                }
+            );
+
+
+
+        /* Complaint doesn't exist */
+
+
+        if (index === -1) {
+
+
+            alert(
+                "Complaint not found ❌"
+            );
+
+
+            return;
+
+        }
+
+
+
+        /* Get new values */
+
+
+        const newStatus =
+            document
+            .getElementById("status")
+            .value;
+
+
+        const newDepartment =
+            document
+            .getElementById("department")
+            .value;
+
+
+        const newResolution =
+            document
+            .getElementById("resolution")
+            .value
+            .trim();
+
+
+
+        /* Validation */
+
+
+        if (
+            newStatus === "" ||
+            newDepartment === "" ||
+            newResolution === ""
+        ) {
+
+
+            alert(
+                "Please fill all fields."
+            );
+
+
+            return;
+
+        }
+
+
+
+        /* =========================================
+           UPDATE EXACT COMPLAINT
+        ========================================= */
+
+
+        complaints[index].status =
+            newStatus;
+
+
+        complaints[index].department =
+            newDepartment;
+
+
+        complaints[index].resolution =
+            newResolution;
+
+
+
+        /* =========================================
+           SAVE UPDATED COMPLAINTS
+        ========================================= */
+
+
+        localStorage.setItem(
+            "allComplaints",
+            JSON.stringify(
+                complaints
+            )
+        );
+
+
+
+        /* =========================================
+           UPDATE SCREEN
+        ========================================= */
+
+
+        document.getElementById(
+            "currentStatus"
+        ).innerText =
+            newStatus;
+
+
+        updateStatusStyle(
+            newStatus
+        );
+
+
+
+        /* =========================================
+           SUCCESS
+        ========================================= */
+
 
         alert(
-            "Complaint not found."
+
+            "Complaint #" +
+            selectedComplaintId +
+            " updated successfully! ✅"
+
         );
 
-        return;
 
     }
-
-
-
-    const newStatus =
-        document.getElementById(
-            "status"
-        ).value;
-
-
-
-    const newDepartment =
-        document.getElementById(
-            "department"
-        ).value;
-
-
-
-    const newResolution =
-        document.getElementById(
-            "resolution"
-        ).value.trim();
-
-
-
-    /*
-    VALIDATION
-    */
-
-
-    if (
-        newStatus === "" ||
-        newDepartment === "" ||
-        newResolution === ""
-    ) {
-
-        alert(
-            "Please fill all fields."
-        );
-
-        return;
-
-    }
-
-
-
-    /*
-    ==========================================
-    FIND COMPLAINT AGAIN BY ID
-    ==========================================
-    */
-
-
-    const index =
-        complaints.findIndex(
-            function (complaint) {
-
-                return complaint.id === selectedComplaintId;
-
-            }
-        );
-
-
-
-    if (index === -1) {
-
-
-        alert(
-            "Complaint could not be found."
-        );
-
-
-        return;
-
-    }
-
-
-
-    /*
-    ==========================================
-    UPDATE ONLY THAT COMPLAINT
-    ==========================================
-    */
-
-
-    complaints[index].status =
-        newStatus;
-
-
-    complaints[index].department =
-        newDepartment;
-
-
-    complaints[index].resolution =
-        newResolution;
-
-
-
-    /*
-    ==========================================
-    SAVE COMPLETE ARRAY
-    ==========================================
-    */
-
-
-    localStorage.setItem(
-        "allComplaints",
-        JSON.stringify(complaints)
-    );
-
-
-
-    /*
-    ==========================================
-    UPDATE PAGE
-    ==========================================
-    */
-
-
-    selectedComplaint =
-        complaints[index];
-
-
-
-    document.getElementById(
-        "currentStatus"
-    ).innerText =
-        newStatus;
-
-
-
-    updateStatusStyle(
-        newStatus
-    );
-
-
-
-    /*
-    ==========================================
-    SUCCESS
-    ==========================================
-    */
-
-
-    alert(
-        "Complaint " +
-        selectedComplaintId +
-        " has been updated successfully! ✅"
-    );
-
-}
+);
 
 </script>
 
 
 
 <footer>
+
 
     <h3>
 
