@@ -66,32 +66,83 @@
         <form id="complaintForm">
 
 
+            <!-- =========================
+                 CATEGORY
+            ========================== -->
+
+
             <label for="category">
+
                 Complaint Category
+
             </label>
 
 
-            <select id="category" required>
+            <select
+                id="category"
+                required>
+
 
                 <option value="">
+
                     Select Category
+
                 </option>
 
-                <option>Infrastructure</option>
-                <option>Hostel</option>
-                <option>Library</option>
-                <option>Laboratory</option>
-                <option>IT / Computer</option>
-                <option>Canteen</option>
-                <option>Administration</option>
-                <option>Other</option>
+
+                <option>
+                    Infrastructure
+                </option>
+
+
+                <option>
+                    Hostel
+                </option>
+
+
+                <option>
+                    Library
+                </option>
+
+
+                <option>
+                    Laboratory
+                </option>
+
+
+                <option>
+                    IT / Computer
+                </option>
+
+
+                <option>
+                    Canteen
+                </option>
+
+
+                <option>
+                    Administration
+                </option>
+
+
+                <option>
+                    Other
+                </option>
+
 
             </select>
 
 
 
+            <!-- =========================
+                 LOCATION
+            ========================== -->
+
+
             <label for="location">
+
                 Problem Location
+
             </label>
 
 
@@ -104,27 +155,58 @@
 
 
 
+            <!-- =========================
+                 PRIORITY
+            ========================== -->
+
+
             <label for="priority">
+
                 Priority
+
             </label>
 
 
-            <select id="priority" required>
+            <select
+                id="priority"
+                required>
+
 
                 <option value="">
+
                     Select Priority
+
                 </option>
 
-                <option>Low</option>
-                <option>Medium</option>
-                <option>High</option>
+
+                <option>
+                    Low
+                </option>
+
+
+                <option>
+                    Medium
+                </option>
+
+
+                <option>
+                    High
+                </option>
+
 
             </select>
 
 
 
+            <!-- =========================
+                 SUBJECT
+            ========================== -->
+
+
             <label for="subject">
+
                 Complaint Subject
+
             </label>
 
 
@@ -137,8 +219,15 @@
 
 
 
+            <!-- =========================
+                 DESCRIPTION
+            ========================== -->
+
+
             <label for="description">
+
                 Describe the Problem
+
             </label>
 
 
@@ -150,25 +239,41 @@
 
 
 
+            <!-- =========================
+                 ANONYMOUS
+            ========================== -->
+
+
             <label class="anonymous-option">
+
 
                 <input
                     type="checkbox"
                     id="anonymous"
                 >
 
+
                 Submit this complaint anonymously
+
 
             </label>
 
 
 
+            <!-- =========================
+                 SUBMIT
+            ========================== -->
+
+
             <button type="submit">
+
                 🚀 Submit Complaint
+
             </button>
 
 
         </form>
+
 
     </div>
 
@@ -179,183 +284,244 @@
 <script>
 
 
-document.getElementById("complaintForm")
-.addEventListener("submit", function(event) {
+/* ==========================================
+   SUBMIT COMPLAINT
+========================================== */
 
 
-    event.preventDefault();
+document
+.getElementById("complaintForm")
+.addEventListener(
+    "submit",
+    function(event) {
 
 
-
-    const category =
-        document.getElementById("category").value;
-
-
-    const location =
-        document.getElementById("location").value.trim();
-
-
-    const priority =
-        document.getElementById("priority").value;
-
-
-    const subject =
-        document.getElementById("subject").value.trim();
-
-
-    const description =
-        document.getElementById("description").value.trim();
-
-
-    const anonymous =
-        document.getElementById("anonymous").checked;
+        event.preventDefault();
 
 
 
-    /*
-    ==========================================
-    GET EXISTING COMPLAINTS
-    ==========================================
-    */
+        /* ==========================================
+           GET FORM VALUES
+        ========================================== */
 
 
-    let complaints =
-        JSON.parse(
-            localStorage.getItem("allComplaints")
-        ) || [];
+        const category =
+            document
+            .getElementById("category")
+            .value;
+
+
+        const location =
+            document
+            .getElementById("location")
+            .value
+            .trim();
+
+
+        const priority =
+            document
+            .getElementById("priority")
+            .value;
+
+
+        const subject =
+            document
+            .getElementById("subject")
+            .value
+            .trim();
+
+
+        const description =
+            document
+            .getElementById("description")
+            .value
+            .trim();
+
+
+        const anonymous =
+            document
+            .getElementById("anonymous")
+            .checked;
 
 
 
-    /*
-    ==========================================
-    GENERATE UNIQUE ID
-    ==========================================
-    */
+        /* ==========================================
+           GET ALL EXISTING COMPLAINTS
+        ========================================== */
 
 
-    let complaintId;
+        let complaints =
+            JSON.parse(
+                localStorage.getItem(
+                    "allComplaints"
+                )
+            ) || [];
 
 
-    do {
 
-        const complaintNumber =
-            Math.floor(
-                1000 + Math.random() * 9000
-            );
+        /*
+        Make sure it is an array
+        */
 
-        complaintId =
-            "CR" + complaintNumber;
+
+        if (!Array.isArray(complaints)) {
+
+            complaints = [];
+
+        }
+
+
+
+        /* ==========================================
+           GENERATE UNIQUE COMPLAINT ID
+        ========================================== */
+
+
+        let complaintId;
+
+
+        do {
+
+
+            const complaintNumber =
+                Math.floor(
+                    1000 +
+                    Math.random() * 9000
+                );
+
+
+            complaintId =
+                "CR" +
+                complaintNumber;
+
+
+        }
+
+        while (
+            complaints.some(
+                function(complaint) {
+
+                    return (
+                        complaint.id ===
+                        complaintId
+                    );
+
+                }
+            )
+        );
+
+
+
+        /* ==========================================
+           CREATE NEW COMPLAINT
+        ========================================== */
+
+
+        const complaint = {
+
+
+            id:
+                complaintId,
+
+
+            category:
+                category,
+
+
+            location:
+                location,
+
+
+            priority:
+                priority,
+
+
+            subject:
+                subject,
+
+
+            description:
+                description,
+
+
+            anonymous:
+                anonymous,
+
+
+            status:
+                "Pending",
+
+
+            department:
+                "Not Assigned",
+
+
+            resolution:
+                "No resolution yet",
+
+
+            date:
+                new Date()
+                .toLocaleDateString()
+
+        };
+
+
+
+        /* ==========================================
+           ADD NEW COMPLAINT
+           WITHOUT DELETING OLD ONES
+        ========================================== */
+
+
+        complaints.push(
+            complaint
+        );
+
+
+
+        /* ==========================================
+           SAVE ALL COMPLAINTS
+        ========================================== */
+
+
+        localStorage.setItem(
+            "allComplaints",
+            JSON.stringify(
+                complaints
+            )
+        );
+
+
+
+        /* ==========================================
+           SUCCESS MESSAGE
+        ========================================== */
+
+
+        alert(
+
+            "Complaint submitted successfully! 🎉\n\n" +
+
+            "Your Complaint ID is: " +
+
+            complaintId
+
+        );
+
+
+
+        /* ==========================================
+           OPEN MY COMPLAINTS
+        ========================================== */
+
+
+        window.location.href =
+            "my-complaints.html";
+
 
     }
-
-    while (
-        complaints.some(
-            complaint => complaint.id === complaintId
-        )
-    );
-
-
-
-    /*
-    ==========================================
-    CREATE NEW COMPLAINT
-    ==========================================
-    */
-
-
-    const complaint = {
-
-        id: complaintId,
-
-        category: category,
-
-        location: location,
-
-        priority: priority,
-
-        subject: subject,
-
-        description: description,
-
-        anonymous: anonymous,
-
-        status: "Pending",
-
-        department: "Not Assigned",
-
-        resolution: "No resolution yet",
-
-        date: new Date().toLocaleDateString()
-
-    };
-
-
-
-    /*
-    ==========================================
-    ADD NEW COMPLAINT
-    WITHOUT DELETING OLD COMPLAINTS
-    ==========================================
-    */
-
-
-    complaints.push(complaint);
-
-
-
-    /*
-    ==========================================
-    SAVE ALL COMPLAINTS
-    ==========================================
-    */
-
-
-    localStorage.setItem(
-        "allComplaints",
-        JSON.stringify(complaints)
-    );
-
-
-
-    /*
-    Keep latest complaint for compatibility
-    */
-
-
-    localStorage.setItem(
-        "newComplaint",
-        JSON.stringify(complaint)
-    );
-
-
-
-    /*
-    ==========================================
-    SUCCESS MESSAGE
-    ==========================================
-    */
-
-
-    alert(
-        "Complaint submitted successfully! 🎉\n\n" +
-        "Your Complaint ID is: " +
-        complaintId
-    );
-
-
-
-    /*
-    ==========================================
-    GO TO MY COMPLAINTS
-    ==========================================
-    */
-
-
-    window.location.href =
-        "my-complaints.html";
-
-
-});
+);
 
 </script>
 
@@ -363,13 +529,20 @@ document.getElementById("complaintForm")
 
 <footer>
 
+
     <h3>
+
         Campus<span>Resolve</span>
+
     </h3>
 
+
     <p>
+
         College Complaint & Resolution System
+
     </p>
+
 
 </footer>
 
