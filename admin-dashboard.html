@@ -15,9 +15,7 @@
 
 </head>
 
-
 <body>
-
 
 <header>
 
@@ -25,13 +23,11 @@
         Campus<span>Resolve</span>
     </div>
 
-
     <nav>
 
         <a href="admin-dashboard.html">
             Dashboard
         </a>
-
 
         <a href="index.html">
             Logout
@@ -42,28 +38,20 @@
 </header>
 
 
-
 <section class="admin-dashboard">
 
-
     <div class="admin-container">
-
 
         <h1>
             Admin Dashboard 🛡️
         </h1>
-
 
         <p class="admin-intro">
             Manage, review and resolve college complaints.
         </p>
 
 
-
-        <!-- =========================
-             STATISTICS
-        ========================== -->
-
+        <!-- STATISTICS -->
 
         <div class="admin-stats">
 
@@ -74,13 +62,9 @@
                     📋
                 </div>
 
-
                 <div>
 
-                    <h2 id="totalCount">
-                        0
-                    </h2>
-
+                    <h2 id="totalCount">0</h2>
 
                     <p>
                         Total Complaints
@@ -91,20 +75,15 @@
             </div>
 
 
-
             <div class="stat-card">
 
                 <div class="stat-icon">
                     ⏳
                 </div>
 
-
                 <div>
 
-                    <h2 id="pendingCount">
-                        0
-                    </h2>
-
+                    <h2 id="pendingCount">0</h2>
 
                     <p>
                         Pending
@@ -115,20 +94,15 @@
             </div>
 
 
-
             <div class="stat-card">
 
                 <div class="stat-icon">
                     🔄
                 </div>
 
-
                 <div>
 
-                    <h2 id="reviewCount">
-                        0
-                    </h2>
-
+                    <h2 id="reviewCount">0</h2>
 
                     <p>
                         Under Review
@@ -139,20 +113,15 @@
             </div>
 
 
-
             <div class="stat-card">
 
                 <div class="stat-icon">
                     ✅
                 </div>
 
-
                 <div>
 
-                    <h2 id="resolvedCount">
-                        0
-                    </h2>
-
+                    <h2 id="resolvedCount">0</h2>
 
                     <p>
                         Resolved
@@ -162,31 +131,22 @@
 
             </div>
 
-
         </div>
 
 
-
-        <!-- =========================
-             ALL COMPLAINTS
-        ========================== -->
-
+        <!-- COMPLAINTS -->
 
         <div class="admin-section-header">
-
 
             <h2>
                 All Complaints
             </h2>
 
-
             <p>
-                All student complaints are displayed here.
+                Manage and update all student complaints.
             </p>
 
-
         </div>
-
 
 
         <div id="complaintsArea"></div>
@@ -201,172 +161,52 @@
 <script>
 
 
+/* ==========================================
+   LOAD DASHBOARD
+========================================== */
+
+
 window.onload = function () {
 
+    loadDashboard();
 
-    /*
-    ==========================================
-    LOAD ALL COMPLAINTS
-    ==========================================
-    */
+};
 
+
+
+/* ==========================================
+   LOAD ALL COMPLAINTS
+========================================== */
+
+
+function getComplaints() {
 
     let complaints =
         JSON.parse(
             localStorage.getItem("allComplaints")
-        ) || [];
+        );
 
+    if (!Array.isArray(complaints)) {
 
-
-    /*
-    ==========================================
-    MIGRATE OLD SINGLE COMPLAINT
-    ==========================================
-    */
-
-
-    if (complaints.length === 0) {
-
-
-        const oldComplaint =
-            localStorage.getItem("newComplaint");
-
-
-
-        if (oldComplaint) {
-
-
-            try {
-
-
-                const complaint =
-                    JSON.parse(oldComplaint);
-
-
-                complaints.push(
-                    complaint
-                );
-
-
-            }
-
-            catch(error) {
-
-                console.error(
-                    error
-                );
-
-            }
-
-        }
+        complaints = [];
 
     }
 
+    return complaints;
 
-
-    /*
-    ==========================================
-    ADD OLD DEMO COMPLAINTS
-    ==========================================
-    */
-
-
-    if (
-        !complaints.some(
-            c => c.id === "CR1001"
-        )
-    ) {
-
-
-        complaints.push({
-
-            id: "CR1001",
-
-            category: "Infrastructure",
-
-            location: "Library - 2nd Floor",
-
-            priority: "High",
-
-            subject: "Water Cooler Not Working",
-
-            description:
-                "The water cooler on the second floor of the library is not working. Students are unable to get drinking water.",
-
-            anonymous: false,
-
-            status: "Pending",
-
-            department: "Not Assigned",
-
-            resolution: "No resolution yet",
-
-            date: "31 August 2026"
-
-        });
-
-    }
+}
 
 
 
-    if (
-        !complaints.some(
-            c => c.id === "CR1002"
-        )
-    ) {
+/* ==========================================
+   LOAD DASHBOARD
+========================================== */
 
 
-        complaints.push({
+function loadDashboard() {
 
-            id: "CR1002",
-
-            category: "IT / Computer",
-
-            location: "Computer Lab 1",
-
-            priority: "Medium",
-
-            subject: "Computer Lab Internet Issue",
-
-            description:
-                "Internet connection is not working properly in Computer Lab 1.",
-
-            anonymous: false,
-
-            status: "Resolved",
-
-            department: "IT Department",
-
-            resolution:
-                "Internet connection repaired.",
-
-            date: "28 August 2026"
-
-        });
-
-    }
-
-
-
-    /*
-    ==========================================
-    SAVE COMPLETE LIST
-    ==========================================
-    */
-
-
-    localStorage.setItem(
-        "allComplaints",
-        JSON.stringify(complaints)
-    );
-
-
-
-    /*
-    ==========================================
-    DISPLAY COUNTS
-    ==========================================
-    */
+    const complaints =
+        getComplaints();
 
 
     updateCounts(
@@ -374,29 +214,17 @@ window.onload = function () {
     );
 
 
-
-    /*
-    ==========================================
-    DISPLAY ALL COMPLAINTS
-    ==========================================
-    */
-
-
     displayComplaints(
         complaints
     );
 
-
-};
-
+}
 
 
 
-/*
-==========================================
-UPDATE COUNTS
-==========================================
-*/
+/* ==========================================
+   UPDATE COUNTS
+========================================== */
 
 
 function updateCounts(complaints) {
@@ -406,66 +234,66 @@ function updateCounts(complaints) {
         complaints.length;
 
 
-
     const pending =
         complaints.filter(
-            c => c.status === "Pending"
-        ).length;
+            function (complaint) {
 
+                return complaint.status === "Pending";
+
+            }
+        ).length;
 
 
     const review =
         complaints.filter(
-            c =>
-                c.status === "Under Review" ||
-                c.status === "In Progress"
-        ).length;
+            function (complaint) {
 
+                return (
+                    complaint.status === "Under Review" ||
+                    complaint.status === "In Progress"
+                );
+
+            }
+        ).length;
 
 
     const resolved =
         complaints.filter(
-            c => c.status === "Resolved"
+            function (complaint) {
+
+                return complaint.status === "Resolved";
+
+            }
         ).length;
 
 
 
     document.getElementById(
         "totalCount"
-    ).innerText =
-        total;
-
+    ).innerText = total;
 
 
     document.getElementById(
         "pendingCount"
-    ).innerText =
-        pending;
-
+    ).innerText = pending;
 
 
     document.getElementById(
         "reviewCount"
-    ).innerText =
-        review;
-
+    ).innerText = review;
 
 
     document.getElementById(
         "resolvedCount"
-    ).innerText =
-        resolved;
+    ).innerText = resolved;
 
 }
 
 
 
-
-/*
-==========================================
-DISPLAY ALL COMPLAINTS
-==========================================
-*/
+/* ==========================================
+   DISPLAY ALL COMPLAINTS
+========================================== */
 
 
 function displayComplaints(complaints) {
@@ -481,210 +309,231 @@ function displayComplaints(complaints) {
 
 
 
-    /*
-    Newest first
-    */
+    if (complaints.length === 0) {
 
 
-    complaints
-    .slice()
-    .reverse()
-    .forEach(function(complaint) {
-
-
-        /*
-        -------------------------------
-        STATUS CLASS
-        -------------------------------
-        */
-
-
-        let statusClass =
-            "pending";
-
-
-
-        if (
-            complaint.status === "Resolved"
-        ) {
-
-            statusClass =
-                "resolved";
-
-        }
-
-
-        else if (
-            complaint.status === "Under Review" ||
-            complaint.status === "In Progress"
-        ) {
-
-            statusClass =
-                "review";
-
-        }
-
-
-        else if (
-            complaint.status === "Rejected"
-        ) {
-
-            statusClass =
-                "rejected";
-
-        }
-
-
-
-        /*
-        -------------------------------
-        BUTTON
-        -------------------------------
-        */
-
-
-        let buttonText =
-            "Manage";
-
-
-        if (
-            complaint.status === "Resolved" ||
-            complaint.status === "Rejected"
-        ) {
-
-            buttonText =
-                "View";
-
-        }
-
-
-
-        /*
-        -------------------------------
-        COMPLAINT CARD
-        -------------------------------
-        */
-
-
-        area.innerHTML += `
+        area.innerHTML = `
 
             <div class="admin-complaint">
 
-
                 <div class="admin-complaint-main">
 
-
-                    <span class="complaint-id">
-
-                        ${complaint.id}
-
-                    </span>
-
-
                     <h3>
-
-                        ${complaint.subject}
-
+                        No complaints found
                     </h3>
 
-
                     <p>
-
-                        📍 ${complaint.location}
-
+                        Student complaints will appear here.
                     </p>
-
-
-                    <p>
-
-                        🏷️ ${complaint.category}
-
-                    </p>
-
-
-                    <p>
-
-                        ⚠️ Priority:
-                        ${complaint.priority}
-
-                    </p>
-
-
-
-                    ${
-                        complaint.department &&
-                        complaint.department !== "Not Assigned"
-
-                        ?
-
-                        `<p>
-
-                            🏢 Department:
-                            ${complaint.department}
-
-                        </p>`
-
-                        :
-
-                        ""
-
-                    }
-
-
-
-                    ${
-                        complaint.status === "Resolved"
-
-                        ?
-
-                        `<p>
-
-                            ✅ Resolution:
-                            ${complaint.resolution}
-
-                        </p>`
-
-                        :
-
-                        ""
-
-                    }
-
 
                 </div>
-
-
-
-                <div class="admin-complaint-side">
-
-
-                    <span class="status ${statusClass}">
-
-                        ${complaint.status}
-
-                    </span>
-
-
-
-                    <a
-                        href="admin-resolution.html?id=${complaint.id}"
-                        class="admin-action">
-
-                        ${buttonText}
-
-                    </a>
-
-
-                </div>
-
 
             </div>
 
         `;
 
 
-    });
+        return;
 
+    }
+
+
+
+    /*
+       Newest complaint first
+    */
+
+
+    complaints
+    .slice()
+    .reverse()
+    .forEach(
+        function (complaint) {
+
+
+            let statusClass =
+                "pending";
+
+
+            if (
+                complaint.status === "Resolved"
+            ) {
+
+                statusClass =
+                    "resolved";
+
+            }
+
+            else if (
+                complaint.status === "Under Review" ||
+                complaint.status === "In Progress"
+            ) {
+
+                statusClass =
+                    "review";
+
+            }
+
+            else if (
+                complaint.status === "Rejected"
+            ) {
+
+                statusClass =
+                    "rejected";
+
+            }
+
+
+
+            let buttonText =
+                "Manage";
+
+
+            if (
+                complaint.status === "Resolved" ||
+                complaint.status === "Rejected"
+            ) {
+
+                buttonText =
+                    "View";
+
+            }
+
+
+
+            area.innerHTML += `
+
+                <div class="admin-complaint">
+
+
+                    <div class="admin-complaint-main">
+
+
+                        <span class="complaint-id">
+
+                            ${complaint.id}
+
+                        </span>
+
+
+                        <h3>
+
+                            ${complaint.subject}
+
+                        </h3>
+
+
+                        <p>
+
+                            📍 ${complaint.location}
+
+                        </p>
+
+
+                        <p>
+
+                            🏷️ ${complaint.category}
+
+                        </p>
+
+
+                        <p>
+
+                            ⚠️ Priority:
+                            ${complaint.priority}
+
+                        </p>
+
+
+                        <p>
+
+                            📅 Submitted:
+                            ${complaint.date}
+
+                        </p>
+
+
+                        ${
+                            complaint.department &&
+                            complaint.department !== "Not Assigned"
+
+                            ?
+
+                            `
+
+                            <p>
+
+                                🏢 Department:
+                                ${complaint.department}
+
+                            </p>
+
+                            `
+
+                            :
+
+                            ""
+
+                        }
+
+
+                        ${
+                            complaint.status === "Resolved"
+
+                            ?
+
+                            `
+
+                            <p>
+
+                                ✅ Resolution:
+                                ${complaint.resolution}
+
+                            </p>
+
+                            `
+
+                            :
+
+                            ""
+
+                        }
+
+
+                    </div>
+
+
+
+                    <div class="admin-complaint-side">
+
+
+                        <span class="status ${statusClass}">
+
+                            ${complaint.status}
+
+                        </span>
+
+
+
+                        <a
+                            href="admin-resolution.html?id=${encodeURIComponent(complaint.id)}"
+                            class="admin-action">
+
+                            ${buttonText}
+
+                        </a>
+
+
+                    </div>
+
+
+                </div>
+
+            `;
+
+
+        }
+    );
 
 }
 
@@ -694,20 +543,13 @@ function displayComplaints(complaints) {
 
 <footer>
 
-
     <h3>
-
         Campus<span>Resolve</span>
-
     </h3>
 
-
     <p>
-
         College Complaint & Resolution System
-
     </p>
-
 
 </footer>
 
