@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Manage Complaint | CampusResolve</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+        Campus<span>Resolve</span>
+    </div>
+
+    <nav>
+        <a href="admin-dashboard.html">Dashboard</a>
+        <a href="index.html">Logout</a>
+    </nav>
+
+</header>
+
+
+<section class="resolution-page">
+
+    <div class="resolution-container">
+
+        <h1>Manage Complaint 🛠️</h1>
+
+        <p class="resolution-intro">
+            Review the complaint and update its resolution.
+        </p>
+
+
+        <div class="resolution-card">
+
+            <div class="resolution-heading">
+
+                <div>
+
+                    <span class="complaint-id">
+                        Complaint #CR1001
+                    </span>
+
+                    <h2>
+                        Water Cooler Not Working
+                    </h2>
+
+                </div>
+
+                <span id="currentStatus"
+                      class="status pending">
+                    Pending
+                </span>
+
+            </div>
+
+
+            <div class="resolution-details">
+
+                <p>
+                    <strong>Category:</strong>
+                    Infrastructure
+                </p>
+
+                <p>
+                    <strong>Location:</strong>
+                    Library - 2nd Floor
+                </p>
+
+                <p>
+                    <strong>Priority:</strong>
+                    High
+                </p>
+
+                <p>
+                    <strong>Submitted By:</strong>
+                    Student
+                </p>
+
+            </div>
+
+
+            <div class="description-box">
+
+                <h3>
+                    Complaint Description
+                </h3>
+
+                <p>
+                    The water cooler on the second floor of
+                    the library is not working. Students are
+                    unable to get drinking water.
+                </p>
+
+            </div>
+
+
+            <form onsubmit="updateComplaint(event)">
+
+                <label for="status">
+                    Update Complaint Status
+                </label>
+
+                <select id="status" required>
+
+                    <option value="">
+                        Select Status
+                    </option>
+
+                    <option value="Pending">
+                        Pending
+                    </option>
+
+                    <option value="Under Review">
+                        Under Review
+                    </option>
+
+                    <option value="In Progress">
+                        In Progress
+                    </option>
+
+                    <option value="Resolved">
+                        Resolved
+                    </option>
+
+                    <option value="Rejected">
+                        Rejected
+                    </option>
+
+                </select>
+
+
+                <label for="department">
+                    Assign Department
+                </label>
+
+                <select id="department" required>
+
+                    <option value="">
+                        Select Department
+                    </option>
+
+                    <option>
+                        Maintenance
+                    </option>
+
+                    <option>
+                        IT Department
+                    </option>
+
+                    <option>
+                        Hostel Department
+                    </option>
+
+                    <option>
+                        Library Department
+                    </option>
+
+                    <option>
+                        Administration
+                    </option>
+
+                </select>
+
+
+                <label for="resolution">
+                    Resolution / Admin Remark
+                </label>
+
+                <textarea
+                    id="resolution"
+                    rows="6"
+                    placeholder="Enter the action taken or resolution..."
+                    required></textarea>
+
+
+                <button type="submit">
+                    ✅ Update Complaint
+                </button>
+
+            </form>
+
+
+            <a href="admin-dashboard.html"
+               class="back-button">
+
+                ← Back to Admin Dashboard
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<script>
+
+function updateComplaint(event) {
+
+    event.preventDefault();
+
+    const status =
+        document.getElementById("status").value;
+
+    const department =
+        document.getElementById("department").value;
+
+    const resolution =
+        document.getElementById("resolution").value;
+
+
+    if (status === "" ||
+        department === "" ||
+        resolution === "") {
+
+        alert("Please fill all fields.");
+
+        return;
+    }
+
+
+    /* Save complaint information */
+
+    localStorage.setItem(
+        "complaintStatus",
+        status
+    );
+
+    localStorage.setItem(
+        "complaintDepartment",
+        department
+    );
+
+    localStorage.setItem(
+        "complaintResolution",
+        resolution
+    );
+
+
+    /* Change status on this page */
+
+    const statusBox =
+        document.getElementById("currentStatus");
+
+    statusBox.innerText = status;
+
+    statusBox.className = "status";
+
+
+    if (status === "Resolved") {
+
+        statusBox.classList.add("resolved");
+
+    } else {
+
+        statusBox.classList.add("pending");
+
+    }
+
+
+    alert(
+        "Complaint updated successfully! ✅"
+    );
+
+}
+
+</script>
+
+
+<footer>
+
+    <h3>
+        Campus<span>Resolve</span>
+    </h3>
+
+    <p>
+        College Complaint & Resolution System
+    </p>
+
+</footer>
+
+</body>
+
+</html>

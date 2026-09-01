@@ -1,0 +1,376 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard | CampusResolve</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+        Campus<span>Resolve</span>
+    </div>
+
+    <nav>
+
+        <a href="admin-dashboard.html">
+            Dashboard
+        </a>
+
+        <a href="index.html">
+            Logout
+        </a>
+
+    </nav>
+
+</header>
+
+
+<section class="admin-dashboard">
+
+    <div class="admin-container">
+
+        <h1>
+            Admin Dashboard 🛡️
+        </h1>
+
+        <p class="admin-intro">
+            Manage, review and resolve college complaints.
+        </p>
+
+
+        <!-- Statistics -->
+
+        <div class="admin-stats">
+
+            <div class="stat-card">
+
+                <div class="stat-icon">📋</div>
+
+                <div>
+                    <h2 id="totalCount">24</h2>
+                    <p>Total Complaints</p>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">⏳</div>
+
+                <div>
+                    <h2 id="pendingCount">08</h2>
+                    <p>Pending</p>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">🔄</div>
+
+                <div>
+                    <h2 id="reviewCount">06</h2>
+                    <p>Under Review</p>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">✅</div>
+
+                <div>
+                    <h2 id="resolvedCount">10</h2>
+                    <p>Resolved</p>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Recent Complaints -->
+
+        <div class="admin-section-header">
+
+            <h2>
+                Recent Complaints
+            </h2>
+
+            <p>
+                Complaints submitted by students appear here.
+            </p>
+
+        </div>
+
+
+        <!-- NEW STUDENT COMPLAINT -->
+
+        <div id="newComplaintArea"></div>
+
+
+        <!-- OLD COMPLAINT -->
+
+        <div class="admin-complaint">
+
+            <div class="admin-complaint-main">
+
+                <span class="complaint-id">
+                    CR1001
+                </span>
+
+                <h3>
+                    Water Cooler Not Working
+                </h3>
+
+                <p>
+                    📍 Library - 2nd Floor
+                </p>
+
+                <p>
+                    🏷️ Infrastructure
+                </p>
+
+            </div>
+
+
+            <div class="admin-complaint-side">
+
+                <span id="oldStatus"
+                      class="status pending">
+                    Pending
+                </span>
+
+                <a href="admin-resolution.html"
+                   class="admin-action"
+                   id="oldButton">
+                    Manage
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- OLD COMPLAINT 2 -->
+
+        <div class="admin-complaint">
+
+            <div class="admin-complaint-main">
+
+                <span class="complaint-id">
+                    CR1002
+                </span>
+
+                <h3>
+                    Computer Lab Internet Issue
+                </h3>
+
+                <p>
+                    📍 Computer Lab 1
+                </p>
+
+                <p>
+                    🏷️ IT / Computer
+                </p>
+
+            </div>
+
+
+            <div class="admin-complaint-side">
+
+                <span class="status resolved">
+                    Resolved
+                </span>
+
+                <a href="admin-resolution.html"
+                   class="admin-action">
+                    View
+                </a>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<script>
+
+window.onload = function () {
+
+
+    /* Get new complaint */
+
+    const savedComplaint =
+        localStorage.getItem("newComplaint");
+
+
+    if (savedComplaint) {
+
+        const complaint =
+            JSON.parse(savedComplaint);
+
+
+        const area =
+            document.getElementById(
+                "newComplaintArea"
+            );
+
+
+        area.innerHTML = `
+
+            <div class="admin-complaint">
+
+                <div class="admin-complaint-main">
+
+                    <span class="complaint-id">
+                        ${complaint.id}
+                    </span>
+
+                    <h3>
+                        ${complaint.subject}
+                    </h3>
+
+                    <p>
+                        📍 ${complaint.location}
+                    </p>
+
+                    <p>
+                        🏷️ ${complaint.category}
+                    </p>
+
+                    <p>
+                        ⚠️ Priority: ${complaint.priority}
+                    </p>
+
+                </div>
+
+
+                <div class="admin-complaint-side">
+
+                    <span class="status pending">
+                        ${complaint.status}
+                    </span>
+
+                    <a href="admin-resolution.html"
+                       class="admin-action">
+
+                        Manage
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        `;
+
+
+        /* Update total */
+
+        document.getElementById(
+            "totalCount"
+        ).innerText = "25";
+
+
+        /* Update pending */
+
+        document.getElementById(
+            "pendingCount"
+        ).innerText = "09";
+
+    }
+
+
+    /* Update old complaint status */
+
+    const oldStatus =
+        localStorage.getItem(
+            "complaintStatus"
+        );
+
+
+    if (oldStatus) {
+
+        const statusBox =
+            document.getElementById(
+                "oldStatus"
+            );
+
+        const button =
+            document.getElementById(
+                "oldButton"
+            );
+
+
+        statusBox.innerText =
+            oldStatus;
+
+
+        statusBox.className =
+            "status";
+
+
+        if (oldStatus === "Resolved") {
+
+            statusBox.classList.add(
+                "resolved"
+            );
+
+            button.innerText =
+                "View";
+
+        } else {
+
+            statusBox.classList.add(
+                "pending"
+            );
+
+            button.innerText =
+                "Manage";
+
+        }
+
+    }
+
+};
+
+</script>
+
+
+<footer>
+
+    <h3>
+        Campus<span>Resolve</span>
+    </h3>
+
+    <p>
+        College Complaint & Resolution System
+    </p>
+
+</footer>
+
+</body>
+
+</html>
+```

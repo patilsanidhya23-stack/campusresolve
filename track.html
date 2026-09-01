@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Track Complaint | CampusResolve</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+        Campus<span>Resolve</span>
+    </div>
+
+    <nav>
+        <a href="student-dashboard.html">Dashboard</a>
+        <a href="my-complaints.html">My Complaints</a>
+        <a href="index.html">Logout</a>
+    </nav>
+
+</header>
+
+
+<section class="track-page">
+
+    <div class="track-container">
+
+        <h1>Track Your Complaint 🔍</h1>
+
+        <p class="track-intro">
+            Follow the progress of your complaint.
+        </p>
+
+
+        <div class="track-card">
+
+            <div class="track-header">
+
+                <div>
+
+                    <span>
+                        Complaint #CR1001
+                    </span>
+
+                    <h2>
+                        Water Cooler Not Working
+                    </h2>
+
+                </div>
+
+                <strong id="studentStatus"
+                        class="track-status">
+                    Pending
+                </strong>
+
+            </div>
+
+
+            <div class="track-info">
+
+                <p>
+                    <strong>Category:</strong>
+                    Infrastructure
+                </p>
+
+                <p>
+                    <strong>Location:</strong>
+                    Library - 2nd Floor
+                </p>
+
+                <p>
+                    <strong>Priority:</strong>
+                    High
+                </p>
+
+                <p>
+                    <strong>Department:</strong>
+                    <span id="studentDepartment">
+                        Not Assigned
+                    </span>
+                </p>
+
+            </div>
+
+
+            <h3 class="timeline-title">
+                Complaint Status
+            </h3>
+
+
+            <div class="timeline">
+
+                <div class="timeline-item completed">
+
+                    <div class="timeline-dot">
+                        ✓
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Complaint Submitted
+                        </h3>
+
+                        <p>
+                            Your complaint was successfully submitted.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="timeline-item completed">
+
+                    <div class="timeline-dot">
+                        ✓
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Complaint Received
+                        </h3>
+
+                        <p>
+                            Administration received your complaint.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div id="reviewStep"
+                     class="timeline-item">
+
+                    <div class="timeline-dot">
+                        3
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Under Review
+                        </h3>
+
+                        <p>
+                            Your complaint is being reviewed.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div id="resolutionStep"
+                     class="timeline-item">
+
+                    <div class="timeline-dot">
+                        4
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Resolution
+                        </h3>
+
+                        <p id="resolutionText">
+                            Resolution will appear here once the issue is solved.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="resolution-box">
+
+                <h3>
+                    💡 Admin Resolution
+                </h3>
+
+                <p id="studentResolution">
+                    No resolution has been added yet.
+                </p>
+
+            </div>
+
+
+            <br>
+
+            <a href="my-complaints.html"
+               class="track-button">
+
+                ← Back to My Complaints
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<script>
+
+window.onload = function () {
+
+    const status =
+        localStorage.getItem("complaintStatus");
+
+    const department =
+        localStorage.getItem("complaintDepartment");
+
+    const resolution =
+        localStorage.getItem("complaintResolution");
+
+
+    /* Show department */
+
+    if (department) {
+
+        document.getElementById(
+            "studentDepartment"
+        ).innerText = department;
+
+    }
+
+
+    /* Show status */
+
+    if (status) {
+
+        document.getElementById(
+            "studentStatus"
+        ).innerText = status;
+
+    }
+
+
+    /* Show resolution */
+
+    if (resolution) {
+
+        document.getElementById(
+            "studentResolution"
+        ).innerText = resolution;
+
+        document.getElementById(
+            "resolutionText"
+        ).innerText = resolution;
+
+    }
+
+
+    /* Update timeline */
+
+    if (status === "Under Review" ||
+        status === "In Progress" ||
+        status === "Resolved") {
+
+        document.getElementById(
+            "reviewStep"
+        ).classList.add("completed");
+
+    }
+
+
+    if (status === "Resolved") {
+
+        document.getElementById(
+            "resolutionStep"
+        ).classList.add("completed");
+
+    }
+
+};
+
+</script>
+
+
+<footer>
+
+    <h3>
+        Campus<span>Resolve</span>
+    </h3>
+
+    <p>
+        College Complaint & Resolution System
+    </p>
+
+</footer>
+
+</body>
+
+</html>

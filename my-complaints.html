@@ -1,0 +1,326 @@
+```html id="r7k3vz"
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>My Complaints | CampusResolve</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+
+<header>
+
+    <div class="logo">
+        Campus<span>Resolve</span>
+    </div>
+
+    <nav>
+
+        <a href="student-dashboard.html">
+            Dashboard
+        </a>
+
+        <a href="complaint.html">
+            New Complaint
+        </a>
+
+        <a href="index.html">
+            Logout
+        </a>
+
+    </nav>
+
+</header>
+
+
+<section class="complaints-page">
+
+    <div class="complaints-container">
+
+        <h1>
+            My Complaints
+        </h1>
+
+        <p class="complaints-intro">
+            View and track all your submitted complaints.
+        </p>
+
+
+        <!-- NEW COMPLAINT WILL APPEAR HERE -->
+
+        <div id="newComplaintArea"></div>
+
+
+        <!-- SAMPLE COMPLAINT 1 -->
+
+        <div class="complaint-card">
+
+            <div class="complaint-top">
+
+                <div>
+
+                    <span class="complaint-id">
+                        Complaint #CR1001
+                    </span>
+
+                    <h2>
+                        Water Cooler Not Working
+                    </h2>
+
+                </div>
+
+                <span class="status pending">
+                    Pending
+                </span>
+
+            </div>
+
+
+            <div class="complaint-details">
+
+                <p>
+                    <strong>Category:</strong>
+                    Infrastructure
+                </p>
+
+                <p>
+                    <strong>Location:</strong>
+                    Library - 2nd Floor
+                </p>
+
+                <p>
+                    <strong>Priority:</strong>
+                    High
+                </p>
+
+                <p>
+                    <strong>Submitted:</strong>
+                    31 August 2026
+                </p>
+
+            </div>
+
+
+            <a href="track.html"
+               class="track-button">
+
+                🔍 Track Complaint
+
+            </a>
+
+        </div>
+
+
+        <!-- SAMPLE COMPLAINT 2 -->
+
+        <div class="complaint-card">
+
+            <div class="complaint-top">
+
+                <div>
+
+                    <span class="complaint-id">
+                        Complaint #CR1002
+                    </span>
+
+                    <h2>
+                        Computer Lab Internet Issue
+                    </h2>
+
+                </div>
+
+                <span class="status resolved">
+                    Resolved
+                </span>
+
+            </div>
+
+
+            <div class="complaint-details">
+
+                <p>
+                    <strong>Category:</strong>
+                    IT / Computer
+                </p>
+
+                <p>
+                    <strong>Location:</strong>
+                    Computer Lab 1
+                </p>
+
+                <p>
+                    <strong>Priority:</strong>
+                    Medium
+                </p>
+
+                <p>
+                    <strong>Submitted:</strong>
+                    28 August 2026
+                </p>
+
+            </div>
+
+
+            <a href="track.html"
+               class="track-button">
+
+                ✅ View Resolution
+
+            </a>
+
+        </div>
+
+
+        <div style="margin-top:30px;">
+
+            <a href="student-dashboard.html"
+               class="track-button">
+
+                ← Back to Dashboard
+
+            </a>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<script>
+
+window.onload = function () {
+
+
+    const savedComplaint =
+        localStorage.getItem("newComplaint");
+
+
+    if (!savedComplaint) {
+
+        return;
+
+    }
+
+
+    const complaint =
+        JSON.parse(savedComplaint);
+
+
+    const area =
+        document.getElementById(
+            "newComplaintArea"
+        );
+
+
+    area.innerHTML = `
+
+        <div class="complaint-card">
+
+            <div class="complaint-top">
+
+                <div>
+
+                    <span class="complaint-id">
+
+                        Complaint #${complaint.id}
+
+                    </span>
+
+                    <h2>
+
+                        ${complaint.subject}
+
+                    </h2>
+
+                </div>
+
+
+                <span class="status pending">
+
+                    ${complaint.status}
+
+                </span>
+
+            </div>
+
+
+            <div class="complaint-details">
+
+                <p>
+
+                    <strong>Category:</strong>
+                    ${complaint.category}
+
+                </p>
+
+
+                <p>
+
+                    <strong>Location:</strong>
+                    ${complaint.location}
+
+                </p>
+
+
+                <p>
+
+                    <strong>Priority:</strong>
+                    ${complaint.priority}
+
+                </p>
+
+
+                <p>
+
+                    <strong>Submitted:</strong>
+                    ${complaint.date}
+
+                </p>
+
+            </div>
+
+
+            <a href="track.html"
+               class="track-button">
+
+                🔍 Track Complaint
+
+            </a>
+
+        </div>
+
+    `;
+
+};
+
+</script>
+
+
+<footer>
+
+    <h3>
+        Campus<span>Resolve</span>
+    </h3>
+
+    <p>
+        College Complaint & Resolution System
+    </p>
+
+</footer>
+
+</body>
+
+</html>
+```

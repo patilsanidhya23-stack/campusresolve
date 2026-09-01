@@ -1,0 +1,281 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Submit Complaint | CampusResolve</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+        Campus<span>Resolve</span>
+    </div>
+
+    <nav>
+
+        <a href="student-dashboard.html">
+            Dashboard
+        </a>
+
+        <a href="my-complaints.html">
+            My Complaints
+        </a>
+
+        <a href="index.html">
+            Logout
+        </a>
+
+    </nav>
+
+</header>
+
+
+<section class="complaint-page">
+
+    <div class="complaint-container">
+
+        <h1>Submit a Complaint 📝</h1>
+
+        <p class="complaint-intro">
+            Tell us about the issue on your campus.
+        </p>
+
+
+        <form id="complaintForm">
+
+
+            <!-- Category -->
+
+            <label for="category">
+                Complaint Category
+            </label>
+
+            <select id="category" required>
+
+                <option value="">
+                    Select Category
+                </option>
+
+                <option>Infrastructure</option>
+                <option>Hostel</option>
+                <option>Library</option>
+                <option>Laboratory</option>
+                <option>IT / Computer</option>
+                <option>Canteen</option>
+                <option>Administration</option>
+                <option>Other</option>
+
+            </select>
+
+
+            <!-- Location -->
+
+            <label for="location">
+                Problem Location
+            </label>
+
+            <input
+                type="text"
+                id="location"
+                placeholder="Example: Library - 2nd Floor"
+                required
+            >
+
+
+            <!-- Priority -->
+
+            <label for="priority">
+                Priority
+            </label>
+
+            <select id="priority" required>
+
+                <option value="">
+                    Select Priority
+                </option>
+
+                <option>Low</option>
+                <option>Medium</option>
+                <option>High</option>
+
+            </select>
+
+
+            <!-- Subject -->
+
+            <label for="subject">
+                Complaint Subject
+            </label>
+
+            <input
+                type="text"
+                id="subject"
+                placeholder="Enter complaint subject"
+                required
+            >
+
+
+            <!-- Description -->
+
+            <label for="description">
+                Describe the Problem
+            </label>
+
+            <textarea
+                id="description"
+                rows="7"
+                placeholder="Explain the problem clearly..."
+                required></textarea>
+
+
+            <!-- Anonymous -->
+
+            <label class="anonymous-option">
+
+                <input
+                    type="checkbox"
+                    id="anonymous"
+                >
+
+                Submit this complaint anonymously
+
+            </label>
+
+
+            <!-- Submit -->
+
+            <button type="submit">
+                🚀 Submit Complaint
+            </button>
+
+        </form>
+
+    </div>
+
+</section>
+
+
+<script>
+
+document.getElementById("complaintForm")
+.addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+
+    const category =
+        document.getElementById("category").value;
+
+    const location =
+        document.getElementById("location").value;
+
+    const priority =
+        document.getElementById("priority").value;
+
+    const subject =
+        document.getElementById("subject").value;
+
+    const description =
+        document.getElementById("description").value;
+
+    const anonymous =
+        document.getElementById("anonymous").checked;
+
+
+    /* Generate Complaint ID */
+
+    const complaintNumber =
+        Math.floor(1000 + Math.random() * 9000);
+
+    const complaintId =
+        "CR" + complaintNumber;
+
+
+    /* Save complaint */
+
+    const complaint = {
+
+        id: complaintId,
+
+        category: category,
+
+        location: location,
+
+        priority: priority,
+
+        subject: subject,
+
+        description: description,
+
+        anonymous: anonymous,
+
+        status: "Pending",
+
+        department: "Not Assigned",
+
+        resolution: "No resolution yet",
+
+        date: new Date().toLocaleDateString()
+
+    };
+
+
+    localStorage.setItem(
+        "newComplaint",
+        JSON.stringify(complaint)
+    );
+
+
+    /* Also save current complaint */
+
+    localStorage.setItem(
+        "complaintStatus",
+        "Pending"
+    );
+
+
+    alert(
+        "Complaint submitted successfully! 🎉\n\n" +
+        "Your Complaint ID is: " +
+        complaintId
+    );
+
+
+    /* Open My Complaints */
+
+    window.location.href =
+        "my-complaints.html";
+
+});
+
+</script>
+
+
+<footer>
+
+    <h3>
+        Campus<span>Resolve</span>
+    </h3>
+
+    <p>
+        College Complaint & Resolution System
+    </p>
+
+</footer>
+
+</body>
+
+</html>
+```
