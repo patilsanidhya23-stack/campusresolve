@@ -15,7 +15,6 @@
 
 </head>
 
-
 <body>
 
 
@@ -54,9 +53,7 @@
 
 
         <p class="resolution-intro">
-
             Review the complaint and update its resolution.
-
         </p>
 
 
@@ -69,25 +66,30 @@
 
                 <div>
 
-                    <span class="complaint-id">
 
-                        Complaint #CR1001
+                    <span
+                        class="complaint-id"
+                        id="complaintId">
+
+                        Complaint
 
                     </span>
 
 
-                    <h2>
+                    <h2 id="complaintSubject">
 
-                        Water Cooler Not Working
+                        Loading...
 
                     </h2>
+
 
                 </div>
 
 
 
-                <span id="currentStatus"
-                      class="status pending">
+                <span
+                    id="currentStatus"
+                    class="status pending">
 
                     Pending
 
@@ -98,40 +100,9 @@
 
 
 
-            <div class="resolution-details">
-
-
-                <p>
-
-                    <strong>Category:</strong>
-                    Infrastructure
-
-                </p>
-
-
-                <p>
-
-                    <strong>Location:</strong>
-                    Library - 2nd Floor
-
-                </p>
-
-
-                <p>
-
-                    <strong>Priority:</strong>
-                    High
-
-                </p>
-
-
-                <p>
-
-                    <strong>Submitted By:</strong>
-                    Student
-
-                </p>
-
+            <div
+                class="resolution-details"
+                id="complaintDetails">
 
             </div>
 
@@ -141,17 +112,11 @@
 
 
                 <h3>
-
                     Complaint Description
-
                 </h3>
 
 
-                <p>
-
-                    The water cooler on the second floor of
-                    the library is not working. Students are
-                    unable to get drinking water.
+                <p id="complaintDescription">
 
                 </p>
 
@@ -160,7 +125,9 @@
 
 
 
-            <form onsubmit="updateComplaint(event)">
+            <form
+                id="resolutionForm"
+                onsubmit="updateComplaint(event)">
 
 
                 <label for="status">
@@ -174,44 +141,32 @@
 
 
                     <option value="">
-
                         Select Status
-
                     </option>
 
 
                     <option value="Pending">
-
                         Pending
-
                     </option>
 
 
                     <option value="Under Review">
-
                         Under Review
-
                     </option>
 
 
                     <option value="In Progress">
-
                         In Progress
-
                     </option>
 
 
                     <option value="Resolved">
-
                         Resolved
-
                     </option>
 
 
                     <option value="Rejected">
-
                         Rejected
-
                     </option>
 
 
@@ -230,44 +185,32 @@
 
 
                     <option value="">
-
                         Select Department
-
                     </option>
 
 
                     <option>
-
                         Maintenance
-
                     </option>
 
 
                     <option>
-
                         IT Department
-
                     </option>
 
 
                     <option>
-
                         Hostel Department
-
                     </option>
 
 
                     <option>
-
                         Library Department
-
                     </option>
 
 
                     <option>
-
                         Administration
-
                     </option>
 
 
@@ -301,8 +244,9 @@
 
 
 
-            <a href="admin-dashboard.html"
-               class="back-button">
+            <a
+                href="admin-dashboard.html"
+                class="back-button">
 
                 ← Back to Admin Dashboard
 
@@ -320,184 +264,86 @@
 <script>
 
 
-/*
-==========================================
-LOAD SAVED STATUS WHEN PAGE OPENS
-==========================================
-*/
+/* ==========================================
+   GET COMPLAINT ID FROM URL
+========================================== */
+
+
+const urlParams =
+    new URLSearchParams(
+        window.location.search
+    );
+
+
+const selectedComplaintId =
+    urlParams.get("id");
+
+
+
+/* ==========================================
+   GET ALL COMPLAINTS
+========================================== */
+
+
+let complaints =
+    JSON.parse(
+        localStorage.getItem("allComplaints")
+    ) || [];
+
+
+
+/* ==========================================
+   FIND EXACT COMPLAINT
+========================================== */
+
+
+let selectedComplaint =
+    complaints.find(
+        function (complaint) {
+
+            return complaint.id === selectedComplaintId;
+
+        }
+    );
+
+
+
+/* ==========================================
+   LOAD COMPLAINT
+========================================== */
 
 
 window.onload = function () {
 
 
-    const savedStatus =
-        localStorage.getItem(
-            "complaintStatus"
-        );
+    if (!selectedComplaint) {
 
 
-    if (savedStatus) {
+        document.querySelector(
+            ".resolution-card"
+        ).innerHTML = `
 
+            <h2>
+                Complaint Not Found ❌
+            </h2>
 
-        const statusSelect =
-            document.getElementById(
-                "status"
-            );
+            <p>
+                The complaint ID
+                <strong>${selectedComplaintId}</strong>
+                was not found.
+            </p>
 
+            <br>
 
-        const statusBox =
-            document.getElementById(
-                "currentStatus"
-            );
+            <a
+                href="admin-dashboard.html"
+                class="back-button">
 
+                ← Back to Admin Dashboard
 
-        statusSelect.value =
-            savedStatus;
+            </a>
 
-
-        statusBox.innerText =
-            savedStatus;
-
-
-        statusBox.className =
-            "status";
-
-
-        if (
-            savedStatus === "Resolved"
-        ) {
-
-            statusBox.classList.add(
-                "resolved"
-            );
-
-        }
-
-        else if (
-            savedStatus === "Under Review" ||
-            savedStatus === "In Progress"
-        ) {
-
-            statusBox.classList.add(
-                "review"
-            );
-
-        }
-
-        else {
-
-            statusBox.classList.add(
-                "pending"
-            );
-
-        }
-
-    }
-
-
-    /*
-    --------------------------------------
-    Load saved department
-    --------------------------------------
-    */
-
-
-    const savedDepartment =
-        localStorage.getItem(
-            "complaintDepartment"
-        );
-
-
-    if (savedDepartment) {
-
-        document.getElementById(
-            "department"
-        ).value =
-            savedDepartment;
-
-    }
-
-
-
-    /*
-    --------------------------------------
-    Load saved resolution
-    --------------------------------------
-    */
-
-
-    const savedResolution =
-        localStorage.getItem(
-            "complaintResolution"
-        );
-
-
-    if (savedResolution) {
-
-        document.getElementById(
-            "resolution"
-        ).value =
-            savedResolution;
-
-    }
-
-};
-
-
-
-
-/*
-==========================================
-UPDATE COMPLAINT
-==========================================
-*/
-
-
-function updateComplaint(event) {
-
-
-    event.preventDefault();
-
-
-
-    const status =
-        document.getElementById(
-            "status"
-        ).value;
-
-
-
-    const department =
-        document.getElementById(
-            "department"
-        ).value;
-
-
-
-    const resolution =
-        document.getElementById(
-            "resolution"
-        ).value.trim();
-
-
-
-    /*
-    --------------------------------------
-    Validate
-    --------------------------------------
-    */
-
-
-    if (
-        status === "" ||
-        department === "" ||
-        resolution === ""
-    ) {
-
-
-        alert(
-            "Please fill all fields."
-        );
+        `;
 
 
         return;
@@ -506,123 +352,157 @@ function updateComplaint(event) {
 
 
 
+    document.getElementById(
+        "complaintId"
+    ).innerText =
+        "Complaint #" +
+        selectedComplaint.id;
+
+
+
+    document.getElementById(
+        "complaintSubject"
+    ).innerText =
+        selectedComplaint.subject;
+
+
+
+    document.getElementById(
+        "complaintDescription"
+    ).innerText =
+        selectedComplaint.description;
+
+
+
+    document.getElementById(
+        "complaintDetails"
+    ).innerHTML = `
+
+        <p>
+
+            <strong>Category:</strong>
+            ${selectedComplaint.category}
+
+        </p>
+
+
+        <p>
+
+            <strong>Location:</strong>
+            ${selectedComplaint.location}
+
+        </p>
+
+
+        <p>
+
+            <strong>Priority:</strong>
+            ${selectedComplaint.priority}
+
+        </p>
+
+
+        <p>
+
+            <strong>Submitted By:</strong>
+            ${
+                selectedComplaint.anonymous
+                ? "Anonymous Student"
+                : "Student"
+            }
+
+        </p>
+
+
+        <p>
+
+            <strong>Submitted:</strong>
+            ${selectedComplaint.date}
+
+        </p>
+
+    `;
+
+
+
     /*
-    ======================================
-    SAVE STATUS
-    ======================================
+    CURRENT STATUS
     */
 
 
-    localStorage.setItem(
-        "complaintStatus",
-        status
-    );
+    document.getElementById(
+        "status"
+    ).value =
+        selectedComplaint.status;
 
 
 
-    localStorage.setItem(
-        "complaintDepartment",
-        department
-    );
+    document.getElementById(
+        "currentStatus"
+    ).innerText =
+        selectedComplaint.status;
 
 
 
-    localStorage.setItem(
-        "complaintResolution",
-        resolution
+    updateStatusStyle(
+        selectedComplaint.status
     );
 
 
 
     /*
-    ======================================
-    IMPORTANT FIX
-    UPDATE NEW STUDENT COMPLAINT
-    ======================================
+    EXISTING DEPARTMENT
     */
 
 
-    const savedComplaint =
-        localStorage.getItem(
-            "newComplaint"
-        );
+    if (
+        selectedComplaint.department &&
+        selectedComplaint.department !== "Not Assigned"
+    ) {
 
-
-
-    if (savedComplaint) {
-
-
-        try {
-
-
-            const complaint =
-                JSON.parse(
-                    savedComplaint
-                );
-
-
-            /*
-            Update the actual complaint
-            */
-
-
-            complaint.status =
-                status;
-
-
-            complaint.department =
-                department;
-
-
-            complaint.resolution =
-                resolution;
-
-
-
-            /*
-            Save it back to localStorage
-            */
-
-
-            localStorage.setItem(
-                "newComplaint",
-                JSON.stringify(
-                    complaint
-                )
-            );
-
-
-        }
-
-        catch (error) {
-
-
-            console.error(
-                "Error updating new complaint:",
-                error
-            );
-
-        }
+        document.getElementById(
+            "department"
+        ).value =
+            selectedComplaint.department;
 
     }
 
 
 
     /*
-    ======================================
-    UPDATE STATUS ON CURRENT PAGE
-    ======================================
+    EXISTING RESOLUTION
     */
+
+
+    if (
+        selectedComplaint.resolution &&
+        selectedComplaint.resolution !== "No resolution yet"
+    ) {
+
+        document.getElementById(
+            "resolution"
+        ).value =
+            selectedComplaint.resolution;
+
+    }
+
+};
+
+
+
+
+/* ==========================================
+   STATUS STYLE
+========================================== */
+
+
+function updateStatusStyle(status) {
 
 
     const statusBox =
         document.getElementById(
             "currentStatus"
         );
-
-
-    statusBox.innerText =
-        status;
 
 
     statusBox.className =
@@ -634,19 +514,16 @@ function updateComplaint(event) {
         status === "Resolved"
     ) {
 
-
         statusBox.classList.add(
             "resolved"
         );
 
     }
 
-
     else if (
         status === "Under Review" ||
         status === "In Progress"
     ) {
-
 
         statusBox.classList.add(
             "review"
@@ -654,9 +531,17 @@ function updateComplaint(event) {
 
     }
 
+    else if (
+        status === "Rejected"
+    ) {
+
+        statusBox.classList.add(
+            "rejected"
+        );
+
+    }
 
     else {
-
 
         statusBox.classList.add(
             "pending"
@@ -664,17 +549,183 @@ function updateComplaint(event) {
 
     }
 
+}
+
+
+
+/* ==========================================
+   UPDATE EXACT COMPLAINT
+========================================== */
+
+
+function updateComplaint(event) {
+
+
+    event.preventDefault();
+
 
 
     /*
-    ======================================
-    SUCCESS MESSAGE
-    ======================================
+    Make sure complaint exists
+    */
+
+
+    if (!selectedComplaint) {
+
+        alert(
+            "Complaint not found."
+        );
+
+        return;
+
+    }
+
+
+
+    const newStatus =
+        document.getElementById(
+            "status"
+        ).value;
+
+
+
+    const newDepartment =
+        document.getElementById(
+            "department"
+        ).value;
+
+
+
+    const newResolution =
+        document.getElementById(
+            "resolution"
+        ).value.trim();
+
+
+
+    /*
+    VALIDATION
+    */
+
+
+    if (
+        newStatus === "" ||
+        newDepartment === "" ||
+        newResolution === ""
+    ) {
+
+        alert(
+            "Please fill all fields."
+        );
+
+        return;
+
+    }
+
+
+
+    /*
+    ==========================================
+    FIND COMPLAINT AGAIN BY ID
+    ==========================================
+    */
+
+
+    const index =
+        complaints.findIndex(
+            function (complaint) {
+
+                return complaint.id === selectedComplaintId;
+
+            }
+        );
+
+
+
+    if (index === -1) {
+
+
+        alert(
+            "Complaint could not be found."
+        );
+
+
+        return;
+
+    }
+
+
+
+    /*
+    ==========================================
+    UPDATE ONLY THAT COMPLAINT
+    ==========================================
+    */
+
+
+    complaints[index].status =
+        newStatus;
+
+
+    complaints[index].department =
+        newDepartment;
+
+
+    complaints[index].resolution =
+        newResolution;
+
+
+
+    /*
+    ==========================================
+    SAVE COMPLETE ARRAY
+    ==========================================
+    */
+
+
+    localStorage.setItem(
+        "allComplaints",
+        JSON.stringify(complaints)
+    );
+
+
+
+    /*
+    ==========================================
+    UPDATE PAGE
+    ==========================================
+    */
+
+
+    selectedComplaint =
+        complaints[index];
+
+
+
+    document.getElementById(
+        "currentStatus"
+    ).innerText =
+        newStatus;
+
+
+
+    updateStatusStyle(
+        newStatus
+    );
+
+
+
+    /*
+    ==========================================
+    SUCCESS
+    ==========================================
     */
 
 
     alert(
-        "Complaint updated successfully! ✅"
+        "Complaint " +
+        selectedComplaintId +
+        " has been updated successfully! ✅"
     );
 
 }
@@ -684,7 +735,6 @@ function updateComplaint(event) {
 
 
 <footer>
-
 
     <h3>
 
