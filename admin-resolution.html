@@ -1,7 +1,9 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta name="viewport"
@@ -10,9 +12,12 @@
     <title>Manage Complaint | CampusResolve</title>
 
     <link rel="stylesheet" href="style.css">
+
 </head>
 
+
 <body>
+
 
 <header>
 
@@ -20,160 +25,262 @@
         Campus<span>Resolve</span>
     </div>
 
+
     <nav>
-        <a href="admin-dashboard.html">Dashboard</a>
-        <a href="index.html">Logout</a>
+
+        <a href="admin-dashboard.html">
+            Dashboard
+        </a>
+
+        <a href="index.html">
+            Logout
+        </a>
+
     </nav>
 
 </header>
 
 
+
 <section class="resolution-page">
+
 
     <div class="resolution-container">
 
-        <h1>Manage Complaint 🛠️</h1>
+
+        <h1>
+            Manage Complaint 🛠️
+        </h1>
+
 
         <p class="resolution-intro">
+
             Review the complaint and update its resolution.
+
         </p>
+
 
 
         <div class="resolution-card">
 
+
             <div class="resolution-heading">
+
 
                 <div>
 
                     <span class="complaint-id">
+
                         Complaint #CR1001
+
                     </span>
 
+
                     <h2>
+
                         Water Cooler Not Working
+
                     </h2>
 
                 </div>
 
+
+
                 <span id="currentStatus"
                       class="status pending">
+
                     Pending
+
                 </span>
 
+
             </div>
+
 
 
             <div class="resolution-details">
 
+
                 <p>
+
                     <strong>Category:</strong>
                     Infrastructure
+
                 </p>
 
+
                 <p>
+
                     <strong>Location:</strong>
                     Library - 2nd Floor
+
                 </p>
 
+
                 <p>
+
                     <strong>Priority:</strong>
                     High
+
                 </p>
+
 
                 <p>
+
                     <strong>Submitted By:</strong>
                     Student
+
                 </p>
 
+
             </div>
+
 
 
             <div class="description-box">
 
+
                 <h3>
+
                     Complaint Description
+
                 </h3>
 
+
                 <p>
+
                     The water cooler on the second floor of
                     the library is not working. Students are
                     unable to get drinking water.
+
                 </p>
+
 
             </div>
 
 
+
             <form onsubmit="updateComplaint(event)">
 
+
                 <label for="status">
+
                     Update Complaint Status
+
                 </label>
+
 
                 <select id="status" required>
 
+
                     <option value="">
+
                         Select Status
+
                     </option>
+
 
                     <option value="Pending">
+
                         Pending
+
                     </option>
+
 
                     <option value="Under Review">
+
                         Under Review
+
                     </option>
+
 
                     <option value="In Progress">
+
                         In Progress
+
                     </option>
+
 
                     <option value="Resolved">
+
                         Resolved
+
                     </option>
+
 
                     <option value="Rejected">
+
                         Rejected
+
                     </option>
 
+
                 </select>
+
 
 
                 <label for="department">
+
                     Assign Department
+
                 </label>
+
 
                 <select id="department" required>
 
+
                     <option value="">
+
                         Select Department
+
                     </option>
 
+
                     <option>
+
                         Maintenance
+
                     </option>
 
+
                     <option>
+
                         IT Department
+
                     </option>
 
+
                     <option>
+
                         Hostel Department
+
                     </option>
 
+
                     <option>
+
                         Library Department
+
                     </option>
 
+
                     <option>
+
                         Administration
+
                     </option>
+
 
                 </select>
 
 
+
                 <label for="resolution">
+
                     Resolution / Admin Remark
+
                 </label>
+
 
                 <textarea
                     id="resolution"
@@ -182,11 +289,16 @@
                     required></textarea>
 
 
+
                 <button type="submit">
+
                     ✅ Update Complaint
+
                 </button>
 
+
             </form>
+
 
 
             <a href="admin-dashboard.html"
@@ -196,6 +308,7 @@
 
             </a>
 
+
         </div>
 
     </div>
@@ -203,43 +316,216 @@
 </section>
 
 
+
 <script>
 
-function updateComplaint(event) {
 
-    event.preventDefault();
-
-    const status =
-        document.getElementById("status").value;
-
-    const department =
-        document.getElementById("department").value;
-
-    const resolution =
-        document.getElementById("resolution").value;
+/*
+==========================================
+LOAD SAVED STATUS WHEN PAGE OPENS
+==========================================
+*/
 
 
-    if (status === "" ||
-        department === "" ||
-        resolution === "") {
+window.onload = function () {
 
-        alert("Please fill all fields.");
 
-        return;
+    const savedStatus =
+        localStorage.getItem(
+            "complaintStatus"
+        );
+
+
+    if (savedStatus) {
+
+
+        const statusSelect =
+            document.getElementById(
+                "status"
+            );
+
+
+        const statusBox =
+            document.getElementById(
+                "currentStatus"
+            );
+
+
+        statusSelect.value =
+            savedStatus;
+
+
+        statusBox.innerText =
+            savedStatus;
+
+
+        statusBox.className =
+            "status";
+
+
+        if (
+            savedStatus === "Resolved"
+        ) {
+
+            statusBox.classList.add(
+                "resolved"
+            );
+
+        }
+
+        else if (
+            savedStatus === "Under Review" ||
+            savedStatus === "In Progress"
+        ) {
+
+            statusBox.classList.add(
+                "review"
+            );
+
+        }
+
+        else {
+
+            statusBox.classList.add(
+                "pending"
+            );
+
+        }
+
     }
 
 
-    /* Save complaint information */
+    /*
+    --------------------------------------
+    Load saved department
+    --------------------------------------
+    */
+
+
+    const savedDepartment =
+        localStorage.getItem(
+            "complaintDepartment"
+        );
+
+
+    if (savedDepartment) {
+
+        document.getElementById(
+            "department"
+        ).value =
+            savedDepartment;
+
+    }
+
+
+
+    /*
+    --------------------------------------
+    Load saved resolution
+    --------------------------------------
+    */
+
+
+    const savedResolution =
+        localStorage.getItem(
+            "complaintResolution"
+        );
+
+
+    if (savedResolution) {
+
+        document.getElementById(
+            "resolution"
+        ).value =
+            savedResolution;
+
+    }
+
+};
+
+
+
+
+/*
+==========================================
+UPDATE COMPLAINT
+==========================================
+*/
+
+
+function updateComplaint(event) {
+
+
+    event.preventDefault();
+
+
+
+    const status =
+        document.getElementById(
+            "status"
+        ).value;
+
+
+
+    const department =
+        document.getElementById(
+            "department"
+        ).value;
+
+
+
+    const resolution =
+        document.getElementById(
+            "resolution"
+        ).value.trim();
+
+
+
+    /*
+    --------------------------------------
+    Validate
+    --------------------------------------
+    */
+
+
+    if (
+        status === "" ||
+        department === "" ||
+        resolution === ""
+    ) {
+
+
+        alert(
+            "Please fill all fields."
+        );
+
+
+        return;
+
+    }
+
+
+
+    /*
+    ======================================
+    SAVE STATUS
+    ======================================
+    */
+
 
     localStorage.setItem(
         "complaintStatus",
         status
     );
 
+
+
     localStorage.setItem(
         "complaintDepartment",
         department
     );
+
+
 
     localStorage.setItem(
         "complaintResolution",
@@ -247,25 +533,144 @@ function updateComplaint(event) {
     );
 
 
-    /* Change status on this page */
 
-    const statusBox =
-        document.getElementById("currentStatus");
+    /*
+    ======================================
+    IMPORTANT FIX
+    UPDATE NEW STUDENT COMPLAINT
+    ======================================
+    */
 
-    statusBox.innerText = status;
 
-    statusBox.className = "status";
+    const savedComplaint =
+        localStorage.getItem(
+            "newComplaint"
+        );
 
 
-    if (status === "Resolved") {
 
-        statusBox.classList.add("resolved");
+    if (savedComplaint) {
 
-    } else {
 
-        statusBox.classList.add("pending");
+        try {
+
+
+            const complaint =
+                JSON.parse(
+                    savedComplaint
+                );
+
+
+            /*
+            Update the actual complaint
+            */
+
+
+            complaint.status =
+                status;
+
+
+            complaint.department =
+                department;
+
+
+            complaint.resolution =
+                resolution;
+
+
+
+            /*
+            Save it back to localStorage
+            */
+
+
+            localStorage.setItem(
+                "newComplaint",
+                JSON.stringify(
+                    complaint
+                )
+            );
+
+
+        }
+
+        catch (error) {
+
+
+            console.error(
+                "Error updating new complaint:",
+                error
+            );
+
+        }
 
     }
+
+
+
+    /*
+    ======================================
+    UPDATE STATUS ON CURRENT PAGE
+    ======================================
+    */
+
+
+    const statusBox =
+        document.getElementById(
+            "currentStatus"
+        );
+
+
+    statusBox.innerText =
+        status;
+
+
+    statusBox.className =
+        "status";
+
+
+
+    if (
+        status === "Resolved"
+    ) {
+
+
+        statusBox.classList.add(
+            "resolved"
+        );
+
+    }
+
+
+    else if (
+        status === "Under Review" ||
+        status === "In Progress"
+    ) {
+
+
+        statusBox.classList.add(
+            "review"
+        );
+
+    }
+
+
+    else {
+
+
+        statusBox.classList.add(
+            "pending"
+        );
+
+    }
+
+
+
+    /*
+    ======================================
+    SUCCESS MESSAGE
+    ======================================
+    */
 
 
     alert(
@@ -277,18 +682,28 @@ function updateComplaint(event) {
 </script>
 
 
+
 <footer>
 
+
     <h3>
+
         Campus<span>Resolve</span>
+
     </h3>
 
+
     <p>
+
         College Complaint & Resolution System
+
     </p>
 
+
 </footer>
+
 
 </body>
 
 </html>
+```
