@@ -1,4 +1,4 @@
-```html id="r7k3vz"
+```html
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,6 +15,7 @@
 
 </head>
 
+
 <body>
 
 
@@ -23,6 +24,7 @@
     <div class="logo">
         Campus<span>Resolve</span>
     </div>
+
 
     <nav>
 
@@ -43,142 +45,28 @@
 </header>
 
 
+
 <section class="complaints-page">
 
+
     <div class="complaints-container">
+
 
         <h1>
             My Complaints
         </h1>
+
 
         <p class="complaints-intro">
             View and track all your submitted complaints.
         </p>
 
 
-        <!-- NEW COMPLAINT WILL APPEAR HERE -->
 
-        <div id="newComplaintArea"></div>
+        <!-- ALL COMPLAINTS APPEAR HERE -->
 
+        <div id="complaintsArea"></div>
 
-        <!-- SAMPLE COMPLAINT 1 -->
-
-        <div class="complaint-card">
-
-            <div class="complaint-top">
-
-                <div>
-
-                    <span class="complaint-id">
-                        Complaint #CR1001
-                    </span>
-
-                    <h2>
-                        Water Cooler Not Working
-                    </h2>
-
-                </div>
-
-                <span class="status pending">
-                    Pending
-                </span>
-
-            </div>
-
-
-            <div class="complaint-details">
-
-                <p>
-                    <strong>Category:</strong>
-                    Infrastructure
-                </p>
-
-                <p>
-                    <strong>Location:</strong>
-                    Library - 2nd Floor
-                </p>
-
-                <p>
-                    <strong>Priority:</strong>
-                    High
-                </p>
-
-                <p>
-                    <strong>Submitted:</strong>
-                    31 August 2026
-                </p>
-
-            </div>
-
-
-            <a href="track.html"
-               class="track-button">
-
-                🔍 Track Complaint
-
-            </a>
-
-        </div>
-
-
-        <!-- SAMPLE COMPLAINT 2 -->
-
-        <div class="complaint-card">
-
-            <div class="complaint-top">
-
-                <div>
-
-                    <span class="complaint-id">
-                        Complaint #CR1002
-                    </span>
-
-                    <h2>
-                        Computer Lab Internet Issue
-                    </h2>
-
-                </div>
-
-                <span class="status resolved">
-                    Resolved
-                </span>
-
-            </div>
-
-
-            <div class="complaint-details">
-
-                <p>
-                    <strong>Category:</strong>
-                    IT / Computer
-                </p>
-
-                <p>
-                    <strong>Location:</strong>
-                    Computer Lab 1
-                </p>
-
-                <p>
-                    <strong>Priority:</strong>
-                    Medium
-                </p>
-
-                <p>
-                    <strong>Submitted:</strong>
-                    28 August 2026
-                </p>
-
-            </div>
-
-
-            <a href="track.html"
-               class="track-button">
-
-                ✅ View Resolution
-
-            </a>
-
-        </div>
 
 
         <div style="margin-top:30px;">
@@ -198,114 +86,355 @@
 </section>
 
 
+
 <script>
+
 
 window.onload = function () {
 
 
-    const savedComplaint =
-        localStorage.getItem("newComplaint");
+    /*
+    ==========================================
+    GET ALL COMPLAINTS
+    ==========================================
+    */
 
 
-    if (!savedComplaint) {
+    let complaints =
+        JSON.parse(
+            localStorage.getItem("allComplaints")
+        ) || [];
+
+
+
+    /*
+    ==========================================
+    OLD DATA SUPPORT
+    ==========================================
+    */
+
+
+    if (complaints.length === 0) {
+
+
+        const oldComplaint =
+            localStorage.getItem("newComplaint");
+
+
+
+        if (oldComplaint) {
+
+
+            try {
+
+
+                const complaint =
+                    JSON.parse(oldComplaint);
+
+
+                complaints.push(
+                    complaint
+                );
+
+
+                localStorage.setItem(
+                    "allComplaints",
+                    JSON.stringify(complaints)
+                );
+
+
+            }
+
+            catch(error) {
+
+                console.error(
+                    error
+                );
+
+            }
+
+        }
+
+    }
+
+
+
+    const area =
+        document.getElementById(
+            "complaintsArea"
+        );
+
+
+
+    /*
+    ==========================================
+    NO COMPLAINTS
+    ==========================================
+    */
+
+
+    if (complaints.length === 0) {
+
+
+        area.innerHTML = `
+
+            <div class="complaint-card">
+
+                <h2>
+                    No Complaints Yet
+                </h2>
+
+                <p>
+                    You have not submitted any complaints.
+                </p>
+
+            </div>
+
+        `;
+
 
         return;
 
     }
 
 
-    const complaint =
-        JSON.parse(savedComplaint);
+
+    /*
+    ==========================================
+    DISPLAY ALL COMPLAINTS
+    ==========================================
+    */
 
 
-    const area =
-        document.getElementById(
-            "newComplaintArea"
-        );
+    area.innerHTML = "";
 
 
-    area.innerHTML = `
 
-        <div class="complaint-card">
+    /*
+    Newest complaint first
+    */
 
-            <div class="complaint-top">
 
-                <div>
+    complaints
+    .slice()
+    .reverse()
+    .forEach(function(complaint) {
 
-                    <span class="complaint-id">
 
-                        Complaint #${complaint.id}
+        /*
+        -------------------------------
+        STATUS CLASS
+        -------------------------------
+        */
+
+
+        let statusClass =
+            "pending";
+
+
+
+        if (
+            complaint.status === "Resolved"
+        ) {
+
+            statusClass =
+                "resolved";
+
+        }
+
+
+        else if (
+            complaint.status === "Under Review" ||
+            complaint.status === "In Progress"
+        ) {
+
+            statusClass =
+                "review";
+
+        }
+
+
+        else if (
+            complaint.status === "Rejected"
+        ) {
+
+            statusClass =
+                "rejected";
+
+        }
+
+
+
+        /*
+        -------------------------------
+        BUTTON TEXT
+        -------------------------------
+        */
+
+
+        let buttonText =
+            "🔍 Track Complaint";
+
+
+
+        if (
+            complaint.status === "Resolved"
+        ) {
+
+            buttonText =
+                "✅ View Resolution";
+
+        }
+
+
+
+        /*
+        -------------------------------
+        DISPLAY
+        -------------------------------
+        */
+
+
+        area.innerHTML += `
+
+            <div class="complaint-card">
+
+
+                <div class="complaint-top">
+
+
+                    <div>
+
+
+                        <span class="complaint-id">
+
+                            Complaint #${complaint.id}
+
+                        </span>
+
+
+                        <h2>
+
+                            ${complaint.subject}
+
+                        </h2>
+
+
+                    </div>
+
+
+
+                    <span class="status ${statusClass}">
+
+                        ${complaint.status}
 
                     </span>
 
-                    <h2>
-
-                        ${complaint.subject}
-
-                    </h2>
 
                 </div>
 
 
-                <span class="status pending">
 
-                    ${complaint.status}
+                <div class="complaint-details">
 
-                </span>
+
+                    <p>
+
+                        <strong>Category:</strong>
+                        ${complaint.category}
+
+                    </p>
+
+
+                    <p>
+
+                        <strong>Location:</strong>
+                        ${complaint.location}
+
+                    </p>
+
+
+                    <p>
+
+                        <strong>Priority:</strong>
+                        ${complaint.priority}
+
+                    </p>
+
+
+                    <p>
+
+                        <strong>Submitted:</strong>
+                        ${complaint.date}
+
+                    </p>
+
+
+                    ${
+                        complaint.department &&
+                        complaint.department !== "Not Assigned"
+
+                        ?
+
+                        `<p>
+
+                            <strong>Department:</strong>
+                            ${complaint.department}
+
+                        </p>`
+
+                        :
+
+                        ""
+
+                    }
+
+
+
+                    ${
+                        complaint.status === "Resolved"
+
+                        ?
+
+                        `<p>
+
+                            <strong>Resolution:</strong>
+                            ${complaint.resolution}
+
+                        </p>`
+
+                        :
+
+                        ""
+
+                    }
+
+
+                </div>
+
+
+
+                <a
+                    href="track.html?id=${complaint.id}"
+                    class="track-button">
+
+                    ${buttonText}
+
+                </a>
+
 
             </div>
 
-
-            <div class="complaint-details">
-
-                <p>
-
-                    <strong>Category:</strong>
-                    ${complaint.category}
-
-                </p>
+        `;
 
 
-                <p>
+    });
 
-                    <strong>Location:</strong>
-                    ${complaint.location}
-
-                </p>
-
-
-                <p>
-
-                    <strong>Priority:</strong>
-                    ${complaint.priority}
-
-                </p>
-
-
-                <p>
-
-                    <strong>Submitted:</strong>
-                    ${complaint.date}
-
-                </p>
-
-            </div>
-
-
-            <a href="track.html"
-               class="track-button">
-
-                🔍 Track Complaint
-
-            </a>
-
-        </div>
-
-    `;
 
 };
 
 </script>
+
 
 
 <footer>
@@ -314,11 +443,14 @@ window.onload = function () {
         Campus<span>Resolve</span>
     </h3>
 
+
     <p>
         College Complaint & Resolution System
     </p>
 
+
 </footer>
+
 
 </body>
 
